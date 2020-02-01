@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace AppleGame.ViewModels
 {
+    /// <summary>
+    /// Main ViewModel.
+    /// </summary>
     public class ShellViewModel : Screen
     {
 
