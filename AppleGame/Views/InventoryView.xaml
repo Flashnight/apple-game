@@ -53,30 +53,7 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="DataTemplate_Level2">
-            <Grid 
-                  AllowDrop="True"
-                  Height="120"
-                  Width="150"
-                  Margin="5"
-                  Background="AliceBlue"
-                  cal:Message.Attach="[Event DragOver]=[Action HandleDragOver($source, $eventArgs)];
-                                      [Event Drop]=[Action HandleDrop($source, $eventArgs)];
-                                      [Event MouseDown]=[Action HandleMouseDown($source, $eventArgs)];">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="8*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="8*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Image Grid.Column="0"
-                           Grid.Row="0"
-                           Source="{Binding Item.ImageSource}"/>
-                <TextBlock Grid.Row="1"
-                               Grid.Column="1"
-                               Text="{Binding Amount}"/>
-            </Grid>
+            <local:InventoryCellView/>
         </DataTemplate>
 
         <DataTemplate x:Key="DataTemplate_Level1">

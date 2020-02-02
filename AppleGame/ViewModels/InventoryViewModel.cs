@@ -13,9 +13,9 @@ namespace AppleGame.ViewModels
 {
     public class InventoryViewModel : Screen
     {
-        private InventoryCell[][] _inventoryCells;
+        private InventoryCellViewModel[][] _inventoryCells;
 
-        public InventoryCell[][] InventoryCells
+        public InventoryCellViewModel[][] InventoryCells
         {
             get => _inventoryCells;
             set
@@ -29,63 +29,18 @@ namespace AppleGame.ViewModels
 
         public InventoryViewModel()
         {
-            _inventoryCells = new InventoryCell[3][];
+            _inventoryCells = new InventoryCellViewModel[3][];
 
             for (int i = 0; i < 3; i++)
             {
-                _inventoryCells[i] = new InventoryCell[3];
+                _inventoryCells[i] = new InventoryCellViewModel[3];
                 for (int j = 0; j < 3; j++)
                 {
-                    _inventoryCells[i][j] = new InventoryCell
-                    {
-                        Item = new Item()
-                    };
+                    _inventoryCells[i][j] = new InventoryCellViewModel();
                 }
             }
-            
-            _inventoryCells[0][0] = new InventoryCell
-            {
-                Amount = 5,
-                Item = new Item
-                {
-                    ImageSource = "../Resources/Pictures/apple.png",
-                    ItemType = ItemType.Apple
-                }
-            };
-
-            _inventoryCells[1][1] = new InventoryCell
-            {
-                Amount = 5,
-                Item = new Item
-                {
-                    ImageSource = "../Resources/Pictures/apple.png",
-                    ItemType = ItemType.Apple
-                }
-            };
 
             NotifyOfPropertyChange(() => InventoryCells);
-        }
-
-        public void HandleDragOver(Grid sender, DragEventArgs args)
-        {
-            if (args.Data.GetDataPresent(typeof(BitmapImage)))
-            {
-                args.Effects = DragDropEffects.Copy;
-            }
-            else
-            {
-                args.Effects = DragDropEffects.None;
-            }
-        }
-
-        public void HandleDrop(Grid sender, DragEventArgs args)
-        {
-            if (null != args.Data && args.Data.GetDataPresent(typeof(BitmapImage)))
-            {
-                BitmapFrame data = (BitmapFrame)args.Data.GetData(typeof(BitmapFrame));
-                
-                
-            }
         }
     }
 }
