@@ -15,11 +15,43 @@ namespace AppleGame.ViewModels
     {
         private IWindowManager _windowManager;
 
+        private InventoryViewModel _inventory;
+
+        private ItemsSourceViewModel _itemsSource;
+
+        public InventoryViewModel Inventory
+        {
+            get => _inventory;
+            set
+            {
+                if (_inventory == value)
+                    return;
+                _inventory = value;
+                NotifyOfPropertyChange(() => Inventory);
+            }
+        }
+
+        public ItemsSourceViewModel ItemsSource
+        {
+            get => _itemsSource;
+            set
+            {
+                if (_itemsSource == value)
+                    return;
+                _itemsSource = value;
+                NotifyOfPropertyChange(() => ItemsSource);
+            }
+        }
+
         /// <summary>
         /// Main ViewModel.
         /// </summary>
-        public ShellViewModel(IWindowManager windowManager)
+        public ShellViewModel(InventoryViewModel inventoryViewModel,
+                              ItemsSourceViewModel itemsSourceViewModel,
+                              IWindowManager windowManager)
         {
+            _inventory = inventoryViewModel;
+            _itemsSource = itemsSourceViewModel;
             _windowManager = windowManager;
         }
 

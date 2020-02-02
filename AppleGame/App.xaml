@@ -9,6 +9,8 @@
                     <local:AppBootstrapper x:Key="bootstrapper"/>
                 </ResourceDictionary>
                 <ResourceDictionary Source="Styles\ButtonStyles.xaml"/>
+                <ResourceDictionary Source="Resources\Resources.xaml"/>
+                <ResourceDictionary Source="Resources\InventoryItems.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

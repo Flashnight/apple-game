@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using AppleGame.ViewModels;
+using Caliburn.Micro;
 using Ninject.Modules;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,12 @@ namespace AppleGame
                                   .InSingletonScope();
             Bind<IEventAggregator>().To<EventAggregator>()
                                     .InSingletonScope();
+
+            // UserControls
+            Bind<InventoryViewModel>().ToConstant(new InventoryViewModel())
+                                      .InThreadScope();
+            Bind<ItemsSourceViewModel>().ToConstant(new ItemsSourceViewModel())
+                                        .InThreadScope();
         }
     }
 }
