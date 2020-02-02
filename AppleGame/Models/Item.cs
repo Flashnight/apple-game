@@ -21,6 +21,12 @@ namespace AppleGame.Models
         /// </summary>
         public string ImageSource { get; set; }
 
+        public Item()
+        {
+            ItemType = ItemType.Apple;
+            ImageSource = "";
+        }
+
         public object Clone()
         {
             return new Item

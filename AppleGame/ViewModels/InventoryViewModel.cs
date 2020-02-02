@@ -13,9 +13,9 @@ namespace AppleGame.ViewModels
 {
     public class InventoryViewModel : Screen
     {
-        private InventoryCell[,] _inventoryCells;
+        private InventoryCell[][] _inventoryCells;
 
-        public InventoryCell[,] InventoryCells
+        public InventoryCell[][] InventoryCells
         {
             get => _inventoryCells;
             set
@@ -29,7 +29,41 @@ namespace AppleGame.ViewModels
 
         public InventoryViewModel()
         {
-            _inventoryCells = new InventoryCell[3,3];
+            _inventoryCells = new InventoryCell[3][];
+
+            for (int i = 0; i < 3; i++)
+            {
+                _inventoryCells[i] = new InventoryCell[3];
+                for (int j = 0; j < 3; j++)
+                {
+                    _inventoryCells[i][j] = new InventoryCell
+                    {
+                        Item = new Item()
+                    };
+                }
+            }
+            
+            _inventoryCells[0][0] = new InventoryCell
+            {
+                Amount = 5,
+                Item = new Item
+                {
+                    ImageSource = "../Resources/Pictures/apple.png",
+                    ItemType = ItemType.Apple
+                }
+            };
+
+            _inventoryCells[1][1] = new InventoryCell
+            {
+                Amount = 5,
+                Item = new Item
+                {
+                    ImageSource = "../Resources/Pictures/apple.png",
+                    ItemType = ItemType.Apple
+                }
+            };
+
+            NotifyOfPropertyChange(() => InventoryCells);
         }
 
         public void HandleDragOver(Grid sender, DragEventArgs args)
@@ -49,7 +83,8 @@ namespace AppleGame.ViewModels
             if (null != args.Data && args.Data.GetDataPresent(typeof(BitmapImage)))
             {
                 BitmapFrame data = (BitmapFrame)args.Data.GetData(typeof(BitmapFrame));
-                // handle the files here!
+                
+                
             }
         }
     }

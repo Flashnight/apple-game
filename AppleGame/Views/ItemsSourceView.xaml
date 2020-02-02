@@ -19,7 +19,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Image x:Name="ItemViewModel"
-               
+               MaxHeight="100"
+               MaxWidth="100"
                Source="{StaticResource AppleImage}"
                Grid.Column="1"
                Grid.Row="1"
