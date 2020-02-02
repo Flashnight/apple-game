@@ -1,5 +1,6 @@
 ﻿using AppleGame.Models;
 using Caliburn.Micro;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace AppleGame.ViewModels
             }
         }
 
-        public InventoryViewModel()
+        public InventoryViewModel(IKernel kernel)
         {
             _inventoryCells = new InventoryCellViewModel[3][];
 
@@ -36,7 +37,7 @@ namespace AppleGame.ViewModels
                 _inventoryCells[i] = new InventoryCellViewModel[3];
                 for (int j = 0; j < 3; j++)
                 {
-                    _inventoryCells[i][j] = new InventoryCellViewModel();
+                    _inventoryCells[i][j] = kernel.Get<InventoryCellViewModel>();
                 }
             }
 

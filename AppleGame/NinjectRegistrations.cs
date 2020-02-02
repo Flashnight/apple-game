@@ -1,5 +1,7 @@
-﻿using AppleGame.ViewModels;
+﻿using AppleGame.Misc;
+using AppleGame.ViewModels;
 using Caliburn.Micro;
+using Ninject;
 using Ninject.Modules;
 using System;
 using System.Collections.Generic;
@@ -24,10 +26,15 @@ namespace AppleGame
                                     .InSingletonScope();
 
             // UserControls
-            Bind<InventoryViewModel>().ToConstant(new InventoryViewModel())
+            Bind<InventoryViewModel>().ToConstructor(opt => new InventoryViewModel(opt.Inject<IKernel>()))
                                       .InThreadScope();
-            Bind<ItemsSourceViewModel>().ToConstant(new ItemsSourceViewModel())
+            Bind<ItemsSourceViewModel>().ToConstructor(opt => new ItemsSourceViewModel())
                                         .InThreadScope();
+            Bind<InventoryCellViewModel>().ToConstructor(opt => new InventoryCellViewModel(opt.Inject<IMediaPlayerWrapper>()))
+                                      .InTransientScope();
+
+            Bind<IMediaPlayerWrapper>().To<MediaPlayerWrapper>()
+                                       .InSingletonScope();
         }
     }
 }
