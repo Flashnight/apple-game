@@ -33,6 +33,7 @@ namespace AppleGame
             Bind<InventoryCellViewModel>().ToConstructor(opt => new InventoryCellViewModel(opt.Inject<IMediaPlayerWrapper>()))
                                       .InTransientScope();
 
+            // Extra objects (from misc. folder).
             Bind<IMediaPlayerWrapper>().To<MediaPlayerWrapper>()
                                        .InSingletonScope();
         }

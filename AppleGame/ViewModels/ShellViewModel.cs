@@ -13,12 +13,24 @@ namespace AppleGame.ViewModels
     /// </summary>
     public class ShellViewModel : Screen
     {
+        /// <summary>
+        /// A service that manages windows.
+        /// </summary>
         private IWindowManager _windowManager;
 
+        /// <summary>
+        /// View model of the inventory.
+        /// </summary>
         private InventoryViewModel _inventory;
 
+        /// <summary>
+        /// View model of the items source.
+        /// </summary>
         private ItemsSourceViewModel _itemsSource;
 
+        /// <summary>
+        /// View model of the inventory.
+        /// </summary>
         public InventoryViewModel Inventory
         {
             get => _inventory;
@@ -31,6 +43,9 @@ namespace AppleGame.ViewModels
             }
         }
 
+        /// <summary>
+        /// View model of the items source.
+        /// </summary>
         public ItemsSourceViewModel ItemsSource
         {
             get => _itemsSource;

@@ -9,7 +9,7 @@ namespace AppleGame.Models
     /// <summary>
     /// Model of the item in the inventory.
     /// </summary>
-    public class Item : ICloneable, IItem
+    public class Item : IItem
     {
         /// <summary>
         /// Type of item.
@@ -21,19 +21,13 @@ namespace AppleGame.Models
         /// </summary>
         public string ImageSource { get; set; }
 
+        /// <summary>
+        /// Model of the item in the inventory.
+        /// </summary>
         public Item()
         {
             ItemType = ItemType.Apple;
             ImageSource = "";
-        }
-
-        public object Clone()
-        {
-            return new Item
-            {
-                ItemType = ItemType,
-                ImageSource = ImageSource
-            };
         }
     }
 }

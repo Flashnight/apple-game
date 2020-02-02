@@ -15,7 +15,8 @@
              Background="AliceBlue"
              cal:Message.Attach="[Event DragOver]=[Action HandleDragOver($source, $eventArgs)];
                                  [Event Drop]=[Action HandleDrop($source, $eventArgs)];
-                                 [Event MouseRightButtonUp]=[Action HandleMouseRightButtonUp()];">
+                                 [Event MouseRightButtonUp]=[Action HandleMouseRightButtonUp()];
+                                 [Event MouseLeftButtonDown]=[Action HandleMouseLeftButtonDown($source, $eventArgs)];">
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>

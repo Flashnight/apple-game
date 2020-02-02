@@ -12,10 +12,19 @@ using System.Windows.Media.Imaging;
 
 namespace AppleGame.ViewModels
 {
+    /// <summary>
+    /// View model of the inventory.
+    /// </summary>
     public class InventoryViewModel : Screen
     {
+        /// <summary>
+        /// View models of the cells.
+        /// </summary>
         private InventoryCellViewModel[][] _inventoryCells;
 
+        /// <summary>
+        /// View models of the cells.
+        /// </summary>
         public InventoryCellViewModel[][] InventoryCells
         {
             get => _inventoryCells;
@@ -28,6 +37,10 @@ namespace AppleGame.ViewModels
             }
         }
 
+        /// <summary>
+        /// View model of the inventory.
+        /// </summary>
+        /// <param name="kernel">IoC kernel.</param>
         public InventoryViewModel(IKernel kernel)
         {
             _inventoryCells = new InventoryCellViewModel[3][];

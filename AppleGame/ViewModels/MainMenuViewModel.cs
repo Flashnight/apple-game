@@ -14,11 +14,17 @@ namespace AppleGame.ViewModels
     {
         public static readonly MainMenuViewModel MainMenuInstance = new MainMenuViewModel();
 
+        /// <summary>
+        /// Runs new game.
+        /// </summary>
         public void NewGame()
         {
             this.TryClose(true);
         }
 
+        /// <summary>
+        /// Closes the application.
+        /// </summary>
         public void Exit()
         {
             this.TryClose(false);
