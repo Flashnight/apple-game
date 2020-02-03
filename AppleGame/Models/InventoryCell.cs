@@ -9,8 +9,17 @@ namespace AppleGame.Models
     /// <summary>
     /// Model of a cell in the inventory.
     /// </summary>
-    public class InventoryCell
+    public class InventoryCell : IModel
     {
+        /// <summary>
+        /// Identifier.
+        /// </summary>
+        public int Id { get; set; }
+
+        public int Row { get; set; }
+
+        public int Column { get; set; }
+
         /// <summary>
         /// Model of item.
         /// </summary>
@@ -20,5 +29,7 @@ namespace AppleGame.Models
         /// Amount of the item in the cell.
         /// </summary>
         public int Amount { get; set; }
+
+        public int InventoryId { get; set; }
     }
 }

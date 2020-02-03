@@ -1,4 +1,5 @@
-﻿using AppleGame.ViewModels;
+﻿using AppleGame.Misc;
+using AppleGame.ViewModels;
 using Caliburn.Micro;
 using Ninject;
 using Ninject.Modules;
@@ -89,6 +90,8 @@ namespace AppleGame
         /// <param name="e">The args.</param>
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            DatabaseMaker.CreateSQLiteDatabase();
+
             DisplayRootViewFor<ShellViewModel>();
         }
     }

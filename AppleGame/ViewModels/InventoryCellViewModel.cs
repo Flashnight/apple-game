@@ -57,7 +57,7 @@ namespace AppleGame.ViewModels
                     Item = new Item
                     {
                         ImageSource = null,
-                        ItemType = ItemType.Apple
+                        Id = (int)ItemType.Apple
                     }
                 };
 

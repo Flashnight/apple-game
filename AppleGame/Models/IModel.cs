@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 namespace AppleGame.Models
 {
     /// <summary>
-    /// Type of item.
+    /// Model of data.
     /// </summary>
-    public enum ItemType
+    public interface IModel
     {
-        Apple = 0
+        /// <summary>
+        /// Identifier.
+        /// </summary>
+        int Id { get; set; }
     }
 }
