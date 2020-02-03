@@ -72,7 +72,7 @@ namespace AppleGame.ViewModels
         /// <param name="args">Drag&Drop arguments.</param>
         public void HandleDragOver(InventoryCellViewModel sender, DragEventArgs args)
         {
-            if (args.Data.GetDataPresent(typeof(BitmapImage)))
+            if (args.Data.GetDataPresent(typeof(ItemsSourceViewModel)))
             {
                 args.Effects = DragDropEffects.Copy;
             }
@@ -89,12 +89,12 @@ namespace AppleGame.ViewModels
         /// <param name="args">Drag&Drop arguments.</param>
         public void HandleDrop(Image sender, DragEventArgs args)
         {
-            if (null != args.Data && args.Data.GetDataPresent(typeof(BitmapImage)))
+            if (null != args.Data && args.Data.GetDataPresent(typeof(ItemsSourceViewModel)))
             {
-                BitmapImage data = (BitmapImage)args.Data.GetData(typeof(BitmapImage));
+                ItemsSourceViewModel data = (ItemsSourceViewModel)args.Data.GetData(typeof(ItemsSourceViewModel));
 
                 _inventoryCell.Amount++;
-                _inventoryCell.Item.ImageSource = data.UriSource.OriginalString;
+                _inventoryCell.Item.ImageSource = data.Item.ImageSource;
 
                 NotifyOfPropertyChange(() => Amount);
                 NotifyOfPropertyChange(() => ImageSource);

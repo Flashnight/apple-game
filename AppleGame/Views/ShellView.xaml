@@ -15,7 +15,20 @@
         <ContentControl x:Name="Inventory" 
                         Grid.Column="0" />
 
-        <ContentControl x:Name="ItemsSource"
-                        Grid.Column="1"/>
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <ContentControl x:Name="ItemsSource"
+                            Grid.Column="1"
+                            Grid.Row="1" />
+        </Grid>
     </Grid>
 </Window>

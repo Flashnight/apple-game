@@ -6,24 +6,12 @@
              xmlns:local="clr-namespace:AppleGame.Views"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Margin="10 20">
+             d:DesignHeight="450" d:DesignWidth="800" Margin="10 20"
+             cal:Message.Attach="[Event MouseDown]=[Action HandleMouseDown($source, $eventArgs)];">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
         <Image x:Name="ItemViewModel"
                MaxHeight="100"
                MaxWidth="100"
-               Source="{StaticResource AppleImage}"
-               Grid.Column="1"
-               Grid.Row="1"
-               cal:Message.Attach="[Event MouseDown]=[Action HandleMouseDown($source, $eventArgs)];"/>
+               Source="{Binding Item.ImageSource, Mode=OneWay}"/>
     </Grid>
 </UserControl>

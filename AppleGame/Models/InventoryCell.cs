@@ -14,7 +14,7 @@ namespace AppleGame.Models
         /// <summary>
         /// Model of item.
         /// </summary>
-        public IItem Item { get; set; }
+        public Item Item { get; set; }
 
         /// <summary>
         /// Amount of the item in the cell.

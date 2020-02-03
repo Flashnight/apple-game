@@ -76,8 +76,8 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Misc\IMediaPlayerWrapper.cs" />
+    <Compile Include="Misc\ItemsMaker.cs" />
     <Compile Include="Misc\MediaPlayerWrapper.cs" />
-    <Compile Include="Models\IItem.cs" />
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\InventoryCell.cs" />
     <Compile Include="Models\Item.cs" />

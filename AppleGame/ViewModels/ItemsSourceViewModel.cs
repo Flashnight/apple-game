@@ -1,4 +1,5 @@
-﻿using AppleGame.Models;
+﻿using AppleGame.Misc;
+using AppleGame.Models;
 using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,12 @@ namespace AppleGame.ViewModels
         /// <summary>
         /// Model of an item.
         /// </summary>
-        private IItem _item;
+        private Item _item;
 
         /// <summary>
         /// Model of an item.
         /// </summary>
-        public IItem Item
+        public Item Item
         {
             get => _item;
             set
@@ -36,14 +37,21 @@ namespace AppleGame.ViewModels
             }
         }
 
+        public ItemsSourceViewModel()
+        {
+            Item = ItemsMaker.MakeItem(ItemType.Apple);
+        }
+
         /// <summary>
         /// Handler for MouseDown. It makes dragging from the source.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="args">Mouse event arguments.</param>
-        public void HandleMouseDown(Image sender, MouseEventArgs args)
+        public void HandleMouseDown(ItemsSourceViewModel sender, MouseEventArgs args)
         {
-            DragDrop.DoDragDrop(sender, sender.Source, DragDropEffects.Copy);
+            DependencyObject dragSource = args.Source as DependencyObject;
+
+            DragDrop.DoDragDrop(dragSource, this, DragDropEffects.Copy);
         }
     }
 }

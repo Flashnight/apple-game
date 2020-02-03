@@ -9,7 +9,7 @@ namespace AppleGame.Models
     /// <summary>
     /// Model of the item in the inventory.
     /// </summary>
-    public class Item : IItem
+    public class Item
     {
         /// <summary>
         /// Type of item.

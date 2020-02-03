@@ -24,6 +24,6 @@ namespace AppleGame.Models
         /// <summary>
         /// Items that storaged in the inventory.
         /// </summary>
-        public InventoryCell [,] Cells { get; set;}
+        public InventoryCell [][] Cells { get; set;}
     }
 }
