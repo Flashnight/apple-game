@@ -103,6 +103,11 @@ namespace AppleGame.ViewModels
             {
                 InventoryCellViewModel data = (InventoryCellViewModel)args.Data.GetData(typeof(InventoryCellViewModel));
 
+                if (data == this)
+                {
+                    return;
+                }
+
                 if (_inventoryCell.Amount == 0)
                 {
                     _inventoryCell.Item.ImageSource = data.ImageSource;
