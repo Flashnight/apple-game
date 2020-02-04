@@ -33,58 +33,62 @@ namespace AppleGame.Misc
             }
 
             SQLiteConnection.CreateFile(baseName);
-            SQLiteFactory sqliteFactory = (SQLiteFactory)DbProviderFactories.GetFactory("System.Data.SQLite");
 
-            using (SQLiteConnection connection = (SQLiteConnection)sqliteFactory.CreateConnection())
+            try
             {
-                connection.ConnectionString = "Data Source = " + baseName;
-                connection.Open();
+                SQLiteFactory sqliteFactory = (SQLiteFactory)DbProviderFactories.GetFactory(connectionString.ProviderName);
 
-                using (SQLiteCommand command = new SQLiteCommand(connection))
+                using (SQLiteConnection connection = (SQLiteConnection)sqliteFactory.CreateConnection())
                 {
-                    command.CommandText = @"CREATE TABLE [Item] (
-                    [Id]    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                    [Name]  TEXT NOT NULL,
-                    [ImageSource]   TEXT NOT NULL
-                    );";
-                    command.CommandType = CommandType.Text;
-                    command.ExecuteNonQuery();
-                }
+                    connection.ConnectionString = "Data Source = " + baseName;
+                    connection.Open();
 
-                using (SQLiteCommand command = new SQLiteCommand(connection))
-                {
-                    command.CommandText = @"CREATE TABLE [Inventory] (
-	                [Id]	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	                [Height]	INTEGER NOT NULL,
-	                [Widht]	INTEGER NOT NULL
-                    );";
-                    command.CommandType = CommandType.Text;
-                    command.ExecuteNonQuery();
-                }
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    using (SQLiteTransaction transaction = connection.BeginTransaction())
+                    {
+                        command.CommandText = @"CREATE TABLE [Item] (
+                        [Id]    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        [Name]  TEXT NOT NULL,
+                        [ImageSource]   TEXT NOT NULL
+                        );";
+                        command.CommandType = CommandType.Text;
+                        command.ExecuteNonQuery();
 
-                using (SQLiteCommand command = new SQLiteCommand(connection))
-                {
-                    command.CommandText = @"CREATE TABLE [InventoryCell] (
-	                [Id]	INTEGER NOT NULL,
-	                [Row]	INTEGER NOT NULL,
-	                [Column]	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	                [Amount]	INTEGER NOT NULL,
-	                [ItemId]	INTEGER NOT NULL,
-	                [InventoryId]	INTEGER NOT NULL,
-	                FOREIGN KEY([InventoryId]) REFERENCES [InventoryCell]([Id]),
-                    FOREIGN KEY([ItemId]) REFERENCES[Item]([Id])
-                    );";
-                    command.CommandType = CommandType.Text;
-                    command.ExecuteNonQuery();
-                }
+                        command.CommandText = @"CREATE TABLE [Inventory] (
+	                    [Id]	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	                    [Height]	INTEGER NOT NULL,
+	                    [Widht]	INTEGER NOT NULL
+                        );";
+                        command.CommandType = CommandType.Text;
+                        command.ExecuteNonQuery();
 
-                using (SQLiteCommand command = new SQLiteCommand(connection))
-                {
-                    command.CommandText = @"INSERT INTO Item([Id], [Name], [ImageSource])
-                    VALUES (0, 'Apple', '../Resources/Pictures/apple.png')";
-                    command.CommandType = CommandType.Text;
-                    command.ExecuteNonQuery();
+                        command.CommandText = @"CREATE TABLE [InventoryCell] (
+	                    [Id]	INTEGER NOT NULL,
+	                    [Row]	INTEGER NOT NULL,
+	                    [Column]	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	                    [Amount]	INTEGER NOT NULL,
+	                    [ItemId]	INTEGER NOT NULL,
+	                    [InventoryId]	INTEGER NOT NULL,
+	                    FOREIGN KEY([InventoryId]) REFERENCES [InventoryCell]([Id]),
+                        FOREIGN KEY([ItemId]) REFERENCES[Item]([Id])
+                        );";
+                        command.CommandType = CommandType.Text;
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = @"INSERT INTO Item([Id], [Name], [ImageSource])
+                        VALUES (0, 'Apple', '../Resources/Pictures/apple.png')";
+                        command.CommandType = CommandType.Text;
+                        command.ExecuteNonQuery();
+
+                        transaction.Commit();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                File.Delete(baseName);
+
+                throw ex;
             }
         }
     }
