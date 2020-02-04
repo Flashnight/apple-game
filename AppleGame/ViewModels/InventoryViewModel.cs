@@ -1,4 +1,5 @@
-﻿using AppleGame.Models;
+﻿using AppleGame.Events;
+using AppleGame.Models;
 using Caliburn.Micro;
 using Ninject;
 using System;
@@ -15,8 +16,12 @@ namespace AppleGame.ViewModels
     /// <summary>
     /// View model of the inventory.
     /// </summary>
-    public class InventoryViewModel : Screen
+    public class InventoryViewModel : Screen, IHandle<NewGameEvent>
     {
+        private IKernel _kernel;
+
+        private IEventAggregator _eventAggregator;
+
         /// <summary>
         /// View models of the cells.
         /// </summary>
@@ -41,7 +46,20 @@ namespace AppleGame.ViewModels
         /// View model of the inventory.
         /// </summary>
         /// <param name="kernel">IoC kernel.</param>
-        public InventoryViewModel(IKernel kernel)
+        /// <param name="eventAggregator">Enabled loosely-coupled publication of and subscription to events.</param>
+        public InventoryViewModel(IKernel kernel, IEventAggregator eventAggregator)
+        {
+            _kernel = kernel;
+
+            _eventAggregator = eventAggregator;
+            _eventAggregator.Subscribe(this);
+        }
+
+        /// <summary>
+        /// Handler for new game event. It cleans the inventory.
+        /// </summary>
+        /// <param name="message">Event's data.</param>
+        public void Handle(NewGameEvent message)
         {
             _inventoryCells = new InventoryCellViewModel[3][];
 
@@ -50,7 +68,7 @@ namespace AppleGame.ViewModels
                 _inventoryCells[i] = new InventoryCellViewModel[3];
                 for (int j = 0; j < 3; j++)
                 {
-                    _inventoryCells[i][j] = kernel.Get<InventoryCellViewModel>();
+                    _inventoryCells[i][j] = _kernel.Get<InventoryCellViewModel>();
                 }
             }
 

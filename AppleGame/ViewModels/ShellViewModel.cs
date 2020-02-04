@@ -29,6 +29,11 @@ namespace AppleGame.ViewModels
         private ItemsSourceViewModel _itemsSource;
 
         /// <summary>
+        /// View model for main menu.
+        /// </summary>
+        private MainMenuViewModel _mainMenuViewModel;
+
+        /// <summary>
         /// View model of the inventory.
         /// </summary>
         public InventoryViewModel Inventory
@@ -61,13 +66,30 @@ namespace AppleGame.ViewModels
         /// <summary>
         /// Main ViewModel.
         /// </summary>
+        /// <param name="inventoryViewModel">View model of the inventory.</param>
+        /// <param name="itemsSourceViewModel">View model of the items source.</param>
+        /// <param name="mainMenuViewModel">View model for main menu.</param>
+        /// <param name="windowManager">A service that manages windows.</param>
         public ShellViewModel(InventoryViewModel inventoryViewModel,
                               ItemsSourceViewModel itemsSourceViewModel,
+                              MainMenuViewModel mainMenuViewModel,
                               IWindowManager windowManager)
         {
             _inventory = inventoryViewModel;
             _itemsSource = itemsSourceViewModel;
+            _mainMenuViewModel = mainMenuViewModel;
             _windowManager = windowManager;
+        }
+
+        /// <summary>
+        /// It's called when button "New Game" is pressed.
+        /// </summary>
+        public void ShowMainMenu()
+        {
+            Execute.OnUIThread(() =>
+            {
+                bool? dialogResult = _windowManager.ShowDialog(_mainMenuViewModel);
+            });
         }
 
         /// <summary>
@@ -76,15 +98,7 @@ namespace AppleGame.ViewModels
         protected override void OnActivate()
         {
             // Firstly, show the main menu.
-            var mainMenu = MainMenuViewModel.MainMenuInstance;
-            Execute.OnUIThread(() => 
-            {
-                bool? dialogResult = _windowManager.ShowDialog(mainMenu);
-
-                // If user presses "Exit", then the application will be closed.
-                if (dialogResult == false)
-                    Application.Current.Shutdown();
-            });
+            ShowMainMenu();
 
             base.OnActivate();
         }

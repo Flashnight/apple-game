@@ -10,17 +10,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppleGame.Misc
+namespace AppleGame.Database
 {
     /// <summary>
     /// It initializes new database.
     /// </summary>
-    public static class DatabaseMaker
+    public class SQLiteDatabaseMaker : IDatabaseMaker
     {
         /// <summary>
         /// Initializes new database if it doesnt exist for SQLLite.
         /// </summary>
-        public static void CreateSQLiteDatabase()
+        public void CreateDatabase()
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"];
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(connectionString.ConnectionString);
@@ -40,7 +40,7 @@ namespace AppleGame.Misc
 
                 using (SQLiteConnection connection = (SQLiteConnection)sqliteFactory.CreateConnection())
                 {
-                    connection.ConnectionString = "Data Source = " + baseName;
+                    connection.ConnectionString = connectionString.ConnectionString;
                     connection.Open();
 
                     using (SQLiteCommand command = new SQLiteCommand(connection))

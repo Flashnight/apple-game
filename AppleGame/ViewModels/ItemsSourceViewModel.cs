@@ -1,4 +1,5 @@
-﻿using AppleGame.Misc;
+﻿using AppleGame.Database;
+using AppleGame.Misc;
 using AppleGame.Models;
 using Caliburn.Micro;
 using System;
@@ -37,9 +38,14 @@ namespace AppleGame.ViewModels
             }
         }
 
-        public ItemsSourceViewModel()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="itemsRepository">Encapsulates DB operations.</param>
+        /// <param name="itemId">Identifier of item.</param>
+        public ItemsSourceViewModel(ItemsRepository itemsRepository, int itemId)
         {
-            Item = ItemsMaker.MakeItem(ItemType.Apple);
+            Item = itemsRepository.GetItemById(itemId);
         }
 
         /// <summary>

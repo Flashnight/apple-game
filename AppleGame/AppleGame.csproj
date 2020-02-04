@@ -98,9 +98,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
-    <Compile Include="Misc\DatabaseMaker.cs" />
+    <Compile Include="Database\IItemsDbRepository.cs" />
+    <Compile Include="Database\ItemsSQLiteRepository.cs" />
+    <Compile Include="Events\NewGameEvent.cs" />
+    <Compile Include="Database\IDatabaseMaker.cs" />
+    <Compile Include="Database\SQLiteDatabaseMaker.cs" />
     <Compile Include="Misc\IMediaPlayerWrapper.cs" />
-    <Compile Include="Misc\ItemsMaker.cs" />
     <Compile Include="Misc\MediaPlayerWrapper.cs" />
     <Compile Include="Models\IModel.cs" />
     <Compile Include="Models\Inventory.cs" />
@@ -157,10 +160,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Resources\InventoryItems.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Resources\Resources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -198,6 +197,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -1,9 +1,11 @@
-﻿using Caliburn.Micro;
+﻿using AppleGame.Events;
+using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AppleGame.ViewModels
 {
@@ -12,13 +14,27 @@ namespace AppleGame.ViewModels
     /// </summary>
     public class MainMenuViewModel : Screen
     {
-        public static readonly MainMenuViewModel MainMenuInstance = new MainMenuViewModel();
+        /// <summary>
+        /// Enabled loosely-coupled publication of and subscription to events.
+        /// </summary>
+        private IEventAggregator _eventAggregator;
+
+        /// <summary>
+        /// Main menu ViewModel.
+        /// </summary>
+        /// <param name="eventAggregator">Enabled loosely-coupled publication of and subscription to events.</param>
+        public MainMenuViewModel(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+        }
 
         /// <summary>
         /// Runs new game.
         /// </summary>
         public void NewGame()
         {
+            _eventAggregator.PublishOnUIThread(new NewGameEvent());
+
             this.TryClose(true);
         }
 
@@ -27,7 +43,7 @@ namespace AppleGame.ViewModels
         /// </summary>
         public void Exit()
         {
-            this.TryClose(false);
+            Application.Current.Shutdown();
         }
     }
 }

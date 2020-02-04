@@ -1,10 +1,14 @@
-﻿using AppleGame.Misc;
+﻿using AppleGame.Database;
+using AppleGame.Misc;
 using AppleGame.ViewModels;
 using Caliburn.Micro;
 using Ninject;
 using Ninject.Modules;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.Common;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +23,8 @@ namespace AppleGame
         /// </summary>
         public override void Load()
         {
+            int imageId = int.Parse(ConfigurationManager.AppSettings["imageId"]);
+
             // Objects for Caliburn.Micro.
             Bind<IWindowManager>().To<WindowManager>()
                                   .InSingletonScope();
@@ -26,9 +32,11 @@ namespace AppleGame
                                     .InSingletonScope();
 
             // UserControls
-            Bind<InventoryViewModel>().ToConstructor(opt => new InventoryViewModel(opt.Inject<IKernel>()))
+            Bind<MainMenuViewModel>().ToConstructor(opt => new MainMenuViewModel(opt.Inject<IEventAggregator>()))
+                                     .InSingletonScope();
+            Bind<InventoryViewModel>().ToConstructor(opt => new InventoryViewModel(opt.Inject<IKernel>(), opt.Inject<IEventAggregator>()))
                                       .InThreadScope();
-            Bind<ItemsSourceViewModel>().ToConstructor(opt => new ItemsSourceViewModel())
+            Bind<ItemsSourceViewModel>().ToConstructor(opt => new ItemsSourceViewModel(opt.Inject<ItemsSQLiteRepository>(), imageId))
                                         .InThreadScope();
             Bind<InventoryCellViewModel>().ToConstructor(opt => new InventoryCellViewModel(opt.Inject<IMediaPlayerWrapper>()))
                                       .InTransientScope();
@@ -36,6 +44,13 @@ namespace AppleGame
             // Extra objects (from misc. folder).
             Bind<IMediaPlayerWrapper>().To<MediaPlayerWrapper>()
                                        .InSingletonScope();
+
+            // Database objects
+            Bind<IDatabaseMaker>().To<SQLiteDatabaseMaker>()
+                                  .InTransientScope();
+
+            Bind<ItemsRepository>().To<ItemsSQLiteRepository>()
+                                   .InThreadScope();
         }
     }
 }
