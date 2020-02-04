@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace AppleGame.Database
 {
     /// <summary>
-    /// Encapsulates DB operations.
+    /// Hides DB operations for items.
     /// </summary>
-    public interface ItemsRepository
+    public interface ItemsDbRepository
     {
         /// <summary>
         /// Returns image's data by id.

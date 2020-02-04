@@ -34,7 +34,7 @@ namespace AppleGame
             // UserControls
             Bind<MainMenuViewModel>().ToConstructor(opt => new MainMenuViewModel(opt.Inject<IEventAggregator>()))
                                      .InSingletonScope();
-            Bind<InventoryViewModel>().ToConstructor(opt => new InventoryViewModel(opt.Inject<IKernel>(), opt.Inject<IEventAggregator>()))
+            Bind<InventoryViewModel>().ToConstructor(opt => new InventoryViewModel(opt.Inject<IKernel>(), opt.Inject<IEventAggregator>(), opt.Inject<IInventoryDbRepository>()))
                                       .InThreadScope();
             Bind<ItemsSourceViewModel>().ToConstructor(opt => new ItemsSourceViewModel(opt.Inject<ItemsSQLiteRepository>(), imageId))
                                         .InThreadScope();
@@ -49,8 +49,10 @@ namespace AppleGame
             Bind<IDatabaseMaker>().To<SQLiteDatabaseMaker>()
                                   .InTransientScope();
 
-            Bind<ItemsRepository>().To<ItemsSQLiteRepository>()
-                                   .InThreadScope();
+            Bind<ItemsDbRepository>().To<ItemsSQLiteRepository>()
+                                   .InTransientScope();
+            Bind<IInventoryDbRepository>().To<InventorySQLiteRepository>()
+                                          .InTransientScope();
         }
     }
 }

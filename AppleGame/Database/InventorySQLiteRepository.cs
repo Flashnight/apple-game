@@ -1,10 +1,8 @@
-﻿using AppleGame.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
@@ -13,9 +11,9 @@ using System.Threading.Tasks;
 namespace AppleGame.Database
 {
     /// <summary>
-    /// Hides DB operations for items.
+    /// Hides DB operations for the inventory.
     /// </summary>
-    public class ItemsSQLiteRepository : ItemsDbRepository
+    public class InventorySQLiteRepository : IInventoryDbRepository
     {
         /// <summary>
         /// Contains connections string's data.
@@ -28,20 +26,19 @@ namespace AppleGame.Database
         private SQLiteFactory _sqliteFactory;
 
         /// <summary>
-        /// Hides DB operations for items.
+        /// Hides DB operations for the inventory.
         /// </summary>
-        public ItemsSQLiteRepository()
+        public InventorySQLiteRepository()
         {
             _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"];
             _sqliteFactory = (SQLiteFactory)DbProviderFactories.GetFactory(_connectionString.ProviderName);
         }
 
         /// <summary>
-        /// Returns image's data by id.
+        /// Saves inventory in the database.
         /// </summary>
-        /// <param name="id">Identifier of item.</param>
-        /// <returns>Model's data model.</returns>
-        public Item GetItemById(int id)
+        /// <returns>Inventory's id in the db.</returns>
+        public int CreateNewInventory()
         {
             using (SQLiteConnection connection = (SQLiteConnection)_sqliteFactory.CreateConnection())
             {
@@ -50,21 +47,15 @@ namespace AppleGame.Database
 
                 using (SQLiteCommand command = new SQLiteCommand(connection))
                 {
-                    command.CommandText = $@"SELECT * 
-                    FROM Item 
-                    WHERE Id = {id};";
-                    
-                    SQLiteDataReader reader = command.ExecuteReader();
-                    reader.Read();
+                    command.CommandText = $@"INSERT INTO Inventory (Height, Widht)
+                    VALUES (3, 3);";
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
 
-                    Item item = new Item
-                    {
-                        Id = reader.GetInt32(0),
-                        ItemName = reader.GetString(1),
-                        ImageSource = reader.GetString(2)
-                    };
+                    command.CommandText = "SELECT MAX(Id) FROM Inventory;";
+                    int id = Convert.ToInt32(command.ExecuteScalar());
 
-                    return item;
+                    return id;
                 }
             }
         }

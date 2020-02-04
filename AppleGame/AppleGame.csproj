@@ -98,7 +98,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
+    <Compile Include="Database\IInventoryDbRepository.cs" />
     <Compile Include="Database\IItemsDbRepository.cs" />
+    <Compile Include="Database\InventorySQLiteRepository.cs" />
     <Compile Include="Database\ItemsSQLiteRepository.cs" />
     <Compile Include="Events\NewGameEvent.cs" />
     <Compile Include="Database\IDatabaseMaker.cs" />

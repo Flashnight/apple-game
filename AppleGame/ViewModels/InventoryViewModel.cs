@@ -1,4 +1,5 @@
-﻿using AppleGame.Events;
+﻿using AppleGame.Database;
+using AppleGame.Events;
 using AppleGame.Models;
 using Caliburn.Micro;
 using Ninject;
@@ -18,9 +19,25 @@ namespace AppleGame.ViewModels
     /// </summary>
     public class InventoryViewModel : Screen, IHandle<NewGameEvent>
     {
+        /// <summary>
+        /// Identifier for inventory.
+        /// </summary>
+        private int _inventoryId;
+
+        /// <summary>
+        /// Dependency injection.
+        /// </summary>
         private IKernel _kernel;
 
+        /// <summary>
+        /// Enables loosely-coupled publication of and subscription to events.
+        /// </summary>
         private IEventAggregator _eventAggregator;
+
+        /// <summary>
+        /// Hides DB operations for the inventory.
+        /// </summary>
+        private IInventoryDbRepository _inventoryDbRepository;
 
         /// <summary>
         /// View models of the cells.
@@ -46,13 +63,18 @@ namespace AppleGame.ViewModels
         /// View model of the inventory.
         /// </summary>
         /// <param name="kernel">IoC kernel.</param>
-        /// <param name="eventAggregator">Enabled loosely-coupled publication of and subscription to events.</param>
-        public InventoryViewModel(IKernel kernel, IEventAggregator eventAggregator)
+        /// <param name="eventAggregator">Enables loosely-coupled publication of and subscription to events.</param>
+        /// <param name="inventoryDbRepository">Hides DB operations for the inventory.</param>
+        public InventoryViewModel(IKernel kernel,
+                                  IEventAggregator eventAggregator,
+                                  IInventoryDbRepository inventoryDbRepository)
         {
             _kernel = kernel;
 
             _eventAggregator = eventAggregator;
             _eventAggregator.Subscribe(this);
+
+            _inventoryDbRepository = inventoryDbRepository;
         }
 
         /// <summary>
@@ -73,6 +95,8 @@ namespace AppleGame.ViewModels
             }
 
             NotifyOfPropertyChange(() => InventoryCells);
+
+            _inventoryId = _inventoryDbRepository.CreateNewInventory();
         }
     }
 }
