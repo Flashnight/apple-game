@@ -3,6 +3,7 @@ using AppleGame.Events;
 using AppleGame.Models;
 using Caliburn.Micro;
 using Ninject;
+using Ninject.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,18 +86,23 @@ namespace AppleGame.ViewModels
         {
             _inventoryCells = new InventoryCellViewModel[3][];
 
+            _inventory = _inventoryDbRepository.CreateNewInventory();
+
             for (int i = 0; i < 3; i++)
             {
                 _inventoryCells[i] = new InventoryCellViewModel[3];
                 for (int j = 0; j < 3; j++)
                 {
-                    _inventoryCells[i][j] = _kernel.Get<InventoryCellViewModel>();
+                    InventoryCell cell = _inventory.Cells
+                                                   .First(p => p.Row == i && p.Column == j);
+
+                    ConstructorArgument cellArgument = new ConstructorArgument("inventoryCell", cell);
+
+                    _inventoryCells[i][j] = _kernel.Get<InventoryCellViewModel>(cellArgument);
                 }
             }
 
             NotifyOfPropertyChange(() => InventoryCells);
-
-            _inventory = _inventoryDbRepository.CreateNewInventory();
         }
     }
 }

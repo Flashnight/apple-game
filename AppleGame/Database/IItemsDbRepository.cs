@@ -10,7 +10,7 @@ namespace AppleGame.Database
     /// <summary>
     /// Hides DB operations for items.
     /// </summary>
-    public interface ItemsDbRepository
+    public interface IItemsDbRepository
     {
         /// <summary>
         /// Returns image's data by id.

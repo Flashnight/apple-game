@@ -1,4 +1,5 @@
-﻿using AppleGame.Misc;
+﻿using AppleGame.Database;
+using AppleGame.Misc;
 using AppleGame.Models;
 using Caliburn.Micro;
 using System;
@@ -27,6 +28,16 @@ namespace AppleGame.ViewModels
         private IMediaPlayerWrapper _mediaPlayerWrapper;
 
         /// <summary>
+        /// Hides DB operations for the inventory cells.
+        /// </summary>
+        private IInventoryCellDbRepository _inventoryCellRepository;
+
+        /// <summary>
+        /// Hides DB operations for items.
+        /// </summary>
+        private IItemsDbRepository _itemsRepository;
+
+        /// <summary>
         /// Model of an inventory cell.
         /// </summary>
         private InventoryCell _inventoryCell;
@@ -39,30 +50,23 @@ namespace AppleGame.ViewModels
         /// <summary>
         /// Destination to item's image in file system.
         /// </summary>
-        public string ImageSource => _inventoryCell.Item.ImageSource;
+        public string ImageSource => _inventoryCell?.Item?.ImageSource;
 
         /// <summary>
         /// ViewModel for an invetory cell.
         /// </summary>
         /// <param name="mediaPlayerWrapper">Media player for sounds.</param>
-        public InventoryCellViewModel(IMediaPlayerWrapper mediaPlayerWrapper)
+        public InventoryCellViewModel(IMediaPlayerWrapper mediaPlayerWrapper,
+                                      IInventoryCellDbRepository inventoryCellRepository,
+                                      IItemsDbRepository itemsRepository,
+                                      InventoryCell inventoryCell)
         {
             _mediaPlayerWrapper = mediaPlayerWrapper;
+            
+            _inventoryCellRepository = inventoryCellRepository;
+            _itemsRepository = itemsRepository;
 
-            if (_inventoryCell == null)
-            {
-                var inventoryCell = new InventoryCell
-                {
-                    Amount = 0,
-                    Item = new Item
-                    {
-                        ImageSource = null,
-                        Id = (int)ItemType.Apple
-                    }
-                };
-
-                _inventoryCell = inventoryCell;
-            }
+            _inventoryCell = inventoryCell;
         }
 
         /// <summary>
@@ -94,7 +98,8 @@ namespace AppleGame.ViewModels
                 ItemsSourceViewModel data = (ItemsSourceViewModel)args.Data.GetData(typeof(ItemsSourceViewModel));
 
                 _inventoryCell.Amount++;
-                _inventoryCell.Item.ImageSource = data.Item.ImageSource;
+                _inventoryCell.Item = _itemsRepository.GetItemById(data.Item.Id);
+                //_inventoryCell.Item.ImageSource = data.Item.ImageSource;
 
                 NotifyOfPropertyChange(() => Amount);
                 NotifyOfPropertyChange(() => ImageSource);

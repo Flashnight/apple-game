@@ -43,7 +43,7 @@ namespace AppleGame.ViewModels
         /// </summary>
         /// <param name="itemsRepository">Hides DB operations for items.</param>
         /// <param name="itemId">Identifier of item.</param>
-        public ItemsSourceViewModel(ItemsDbRepository itemsRepository, int itemId)
+        public ItemsSourceViewModel(IItemsDbRepository itemsRepository, int itemId)
         {
             Item = itemsRepository.GetItemById(itemId);
         }
