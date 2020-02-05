@@ -20,9 +20,9 @@ namespace AppleGame.ViewModels
     public class InventoryViewModel : Screen, IHandle<NewGameEvent>
     {
         /// <summary>
-        /// Identifier for inventory.
+        /// Model for inventory.
         /// </summary>
-        private int _inventoryId;
+        private Inventory _inventory;
 
         /// <summary>
         /// Dependency injection.
@@ -96,7 +96,7 @@ namespace AppleGame.ViewModels
 
             NotifyOfPropertyChange(() => InventoryCells);
 
-            _inventoryId = _inventoryDbRepository.CreateNewInventory();
+            _inventory = _inventoryDbRepository.CreateNewInventory();
         }
     }
 }

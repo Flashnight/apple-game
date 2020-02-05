@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AppleGame.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace AppleGame.Database
         /// <summary>
         /// Saves inventory in the database.
         /// </summary>
-        /// <returns>Inventory's id in the db.</returns>
-        int CreateNewInventory();
+        /// <returns>Inventory's data from db.</returns>
+        Inventory CreateNewInventory();
     }
 }

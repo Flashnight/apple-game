@@ -63,11 +63,11 @@ namespace AppleGame.Database
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"CREATE TABLE [InventoryCell] (
-	                    [Id]	INTEGER NOT NULL,
+	                    [Id]	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	                    [Row]	INTEGER NOT NULL,
-	                    [Column]	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	                    [Column]	INTEGER NOT NULL ,
 	                    [Amount]	INTEGER NOT NULL,
-	                    [ItemId]	INTEGER NOT NULL,
+	                    [ItemId]	INTEGER,
 	                    [InventoryId]	INTEGER NOT NULL,
 	                    FOREIGN KEY([InventoryId]) REFERENCES [InventoryCell]([Id]),
                         FOREIGN KEY([ItemId]) REFERENCES[Item]([Id])

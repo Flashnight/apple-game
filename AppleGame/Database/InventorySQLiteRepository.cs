@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AppleGame.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -37,25 +38,75 @@ namespace AppleGame.Database
         /// <summary>
         /// Saves inventory in the database.
         /// </summary>
-        /// <returns>Inventory's id in the db.</returns>
-        public int CreateNewInventory()
+        /// <returns>Inventory's data from the db.</returns>
+        public Inventory CreateNewInventory()
         {
             using (SQLiteConnection connection = (SQLiteConnection)_sqliteFactory.CreateConnection())
             {
+                int inventoryHeight = 3;
+                int inventoryWidth = 3;
+
                 connection.ConnectionString = _connectionString.ConnectionString;
                 connection.Open();
 
                 using (SQLiteCommand command = new SQLiteCommand(connection))
+                using (SQLiteTransaction transaction = connection.BeginTransaction())
                 {
                     command.CommandText = $@"INSERT INTO Inventory (Height, Widht)
-                    VALUES (3, 3);";
+                    VALUES ({inventoryHeight}, {inventoryWidth});";
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
 
                     command.CommandText = "SELECT MAX(Id) FROM Inventory;";
                     int id = Convert.ToInt32(command.ExecuteScalar());
 
-                    return id;
+                    Inventory inventory = new Inventory
+                    {
+                        Id = id,
+                        Height = inventoryHeight,
+                        Width = inventoryWidth
+                    };
+
+                    List<InventoryCell> cells = new List<InventoryCell>();
+
+                    for (int i = 0; i < inventoryHeight; i++)
+                        for (int j = 0; j < inventoryWidth; j++)
+                        {
+                            command.CommandText = $@"INSERT INTO InventoryCell (Row, Column, Amount, InventoryId)
+                            VALUES ({i}, {j}, 0, {id});";
+                            command.CommandType = CommandType.Text;
+                            command.ExecuteNonQuery();
+                        }
+
+                    
+
+                    command.CommandText = $@"SELECT Id, Row, Column FROM InventoryCell
+                    WHERE InventoryId = {id}
+                    ORDER BY ID;";
+                    SQLiteDataReader reader = command.ExecuteReader();
+
+                    for (int i = 0; i < inventoryHeight; i++)
+                        for (int j = 0; j < inventoryWidth; j++)
+                        {
+                            reader.Read();
+
+                            InventoryCell inventoryCell = new InventoryCell
+                            {
+                                Id = reader.GetInt32(0),
+                                Row = reader.GetInt32(1),
+                                Column = reader.GetInt32(2),
+                                Amount = 0,
+                                InventoryId = id
+                            };
+
+                            cells.Add(inventoryCell);
+                        }
+
+                    inventory.Cells = cells;
+
+                    transaction.Commit();
+
+                    return inventory;
                 }
             }
         }

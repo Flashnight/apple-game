@@ -19,11 +19,16 @@ namespace AppleGame.Models
         /// <summary>
         /// Height of the inventory.
         /// </summary>
-        public int Height { get; private set; }
+        public int Height { get; set; }
 
         /// <summary>
         /// Width of the inventory.
         /// </summary>
-        public int Width { get; private set; }
+        public int Width { get; set; }
+
+        /// <summary>
+        /// Cells in the inventory
+        /// </summary>
+        public List<InventoryCell> Cells { get; set; }
     }
 }
