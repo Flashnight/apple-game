@@ -38,8 +38,6 @@ namespace AppleGame
                                       .InThreadScope();
             Bind<ItemsSourceViewModel>().ToConstructor(opt => new ItemsSourceViewModel(opt.Inject<ItemsSQLiteRepository>(), imageId))
                                         .InThreadScope();
-            //Bind<InventoryCellViewModel>().ToConstructor(opt => new InventoryCellViewModel(opt.Inject<IMediaPlayerWrapper>()))
-            //                          .InTransientScope();
 
             // Extra objects (from misc. folder).
             Bind<IMediaPlayerWrapper>().To<MediaPlayerWrapper>()

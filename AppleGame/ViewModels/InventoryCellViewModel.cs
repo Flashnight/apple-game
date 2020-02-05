@@ -43,6 +43,11 @@ namespace AppleGame.ViewModels
         private InventoryCell _inventoryCell;
 
         /// <summary>
+        /// Item in the cell.
+        /// </summary>
+        public Item Item => _inventoryCell.Item;
+
+        /// <summary>
         /// Amount of items in the cell.
         /// </summary>
         public int Amount => _inventoryCell.Amount;
@@ -115,7 +120,7 @@ namespace AppleGame.ViewModels
 
                 if (_inventoryCell.Amount == 0)
                 {
-                    _inventoryCell.Item.ImageSource = data.ImageSource;
+                    _inventoryCell.Item = data.Item;
                     NotifyOfPropertyChange(() => ImageSource);
                 }
 
@@ -168,7 +173,7 @@ namespace AppleGame.ViewModels
         public void ClearCell()
         {
             _inventoryCell.Amount = 0;
-            _inventoryCell.Item.ImageSource = null;
+            _inventoryCell.Item = null;
 
             NotifyOfPropertyChange(() => Amount);
             NotifyOfPropertyChange(() => ImageSource);

@@ -106,7 +106,7 @@
     <Compile Include="Events\NewGameEvent.cs" />
     <Compile Include="Database\IDatabaseMaker.cs" />
     <Compile Include="Database\SQLiteDatabaseMaker.cs" />
-    <Compile Include="IInventoryCellDbRepository.cs" />
+    <Compile Include="Database\IInventoryCellDbRepository.cs" />
     <Compile Include="Misc\IMediaPlayerWrapper.cs" />
     <Compile Include="Misc\MediaPlayerWrapper.cs" />
     <Compile Include="Models\IModel.cs" />
