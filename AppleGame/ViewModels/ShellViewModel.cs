@@ -88,7 +88,7 @@ namespace AppleGame.ViewModels
         {
             Execute.OnUIThread(() =>
             {
-                bool? dialogResult = _windowManager.ShowDialog(_mainMenuViewModel);
+                _windowManager.ShowDialog(_mainMenuViewModel);
             });
         }
 
@@ -98,7 +98,15 @@ namespace AppleGame.ViewModels
         protected override void OnActivate()
         {
             // Firstly, show the main menu.
-            ShowMainMenu();
+            Execute.OnUIThread(() =>
+            {
+                var dialogResult = _windowManager.ShowDialog(_mainMenuViewModel);
+
+                if (dialogResult == false)
+                {
+                    Application.Current.Shutdown();
+                }
+            });
 
             base.OnActivate();
         }
