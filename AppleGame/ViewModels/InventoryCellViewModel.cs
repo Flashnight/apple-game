@@ -129,6 +129,8 @@ namespace AppleGame.ViewModels
 
                 data.ClearCell();
             }
+
+            _inventoryCellRepository.UpdateCell(_inventoryCell);
         }
 
         /// <summary>
@@ -153,6 +155,8 @@ namespace AppleGame.ViewModels
 
             MediaPlayerWrapper player = new MediaPlayerWrapper();
             player.PlayEatingAppleCrunch();
+
+            _inventoryCellRepository.UpdateCell(_inventoryCell);
         }
 
         /// <summary>

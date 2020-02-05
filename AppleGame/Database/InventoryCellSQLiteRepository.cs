@@ -50,7 +50,7 @@ namespace AppleGame.Database
                 {
                     command.CommandText = $@"UPDATE InventoryCell
                     SET Amount = {cell.Amount}, ItemId = {cell.Item.Id}
-                    WHERE Id = {cell.Id}";
+                    WHERE Id = {cell.Id};";
 
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();

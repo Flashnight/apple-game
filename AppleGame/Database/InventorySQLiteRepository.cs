@@ -83,24 +83,25 @@ namespace AppleGame.Database
                     command.CommandText = $@"SELECT Id, Row, Column FROM InventoryCell
                     WHERE InventoryId = {id}
                     ORDER BY ID;";
-                    SQLiteDataReader reader = command.ExecuteReader();
-
-                    for (int i = 0; i < inventoryHeight; i++)
-                        for (int j = 0; j < inventoryWidth; j++)
-                        {
-                            reader.Read();
-
-                            InventoryCell inventoryCell = new InventoryCell
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        for (int i = 0; i < inventoryHeight; i++)
+                            for (int j = 0; j < inventoryWidth; j++)
                             {
-                                Id = reader.GetInt32(0),
-                                Row = reader.GetInt32(1),
-                                Column = reader.GetInt32(2),
-                                Amount = 0,
-                                InventoryId = id
-                            };
+                                reader.Read();
 
-                            cells.Add(inventoryCell);
-                        }
+                                InventoryCell inventoryCell = new InventoryCell
+                                {
+                                    Id = reader.GetInt32(0),
+                                    Row = reader.GetInt32(1),
+                                    Column = reader.GetInt32(2),
+                                    Amount = 0,
+                                    InventoryId = id
+                                };
+
+                                cells.Add(inventoryCell);
+                            }
+                    }
 
                     inventory.Cells = cells;
 

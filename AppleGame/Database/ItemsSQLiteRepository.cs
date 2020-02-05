@@ -53,18 +53,20 @@ namespace AppleGame.Database
                     command.CommandText = $@"SELECT * 
                     FROM Item 
                     WHERE Id = {id};";
-                    
-                    SQLiteDataReader reader = command.ExecuteReader();
-                    reader.Read();
 
-                    Item item = new Item
+                    using (SQLiteDataReader reader = command.ExecuteReader())
                     {
-                        Id = reader.GetInt32(0),
-                        ItemName = reader.GetString(1),
-                        ImageSource = reader.GetString(2)
-                    };
+                        reader.Read();
 
-                    return item;
+                        Item item = new Item
+                        {
+                            Id = reader.GetInt32(0),
+                            ItemName = reader.GetString(1),
+                            ImageSource = reader.GetString(2)
+                        };
+
+                        return item;
+                    }
                 }
             }
         }
