@@ -8,7 +8,9 @@
         Title="ShellView"
         MinHeight="580"
         MinWidth="800" 
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource background}"
+        >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -34,7 +36,10 @@
             <Button x:Name="ShowMainMenu"
                     Grid.Column="1"
                     Grid.Row="1"
-                    Content="Главное меню"/>
+                    Content="Главное меню"
+                    Background="{StaticResource button1}"
+                    FontSize="14"
+                    FontFamily="Verdana"/>
         </Grid>
 
         <ContentControl x:Name="Inventory" 

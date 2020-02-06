@@ -10,7 +10,7 @@
              MinWidth="150"
              Margin="5" 
              AllowDrop="True"
-             Background="Cyan"
+             Background="{StaticResource item}"
              cal:Message.Attach="[Event DragOver]=[Action HandleDragOver($source, $eventArgs)];
                                  [Event Drop]=[Action HandleDrop($source, $eventArgs)];
                                  [Event MouseRightButtonUp]=[Action HandleMouseRightButtonUp()];
