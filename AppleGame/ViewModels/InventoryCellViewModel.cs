@@ -113,7 +113,7 @@ namespace AppleGame.ViewModels
             {
                 InventoryCellViewModel data = (InventoryCellViewModel)args.Data.GetData(typeof(InventoryCellViewModel));
 
-                if (data == this)
+                if (data == this || data?.Item == null)
                 {
                     return;
                 }
@@ -128,6 +128,10 @@ namespace AppleGame.ViewModels
                 NotifyOfPropertyChange(() => Amount);
 
                 data.ClearCell();
+            }
+            else
+            {
+                return;
             }
 
             _inventoryCellRepository.UpdateCell(_inventoryCell);
@@ -166,9 +170,12 @@ namespace AppleGame.ViewModels
         /// <param name="args">Mouse event arguments.</param>
         public void HandleMouseLeftButtonDown(InventoryCellViewModel sender, MouseEventArgs args)
         {
-            DependencyObject dragSource = args.Source as DependencyObject;
+            if (this.Item != null)
+            {
+                DependencyObject dragSource = args.Source as DependencyObject;
 
-            DragDrop.DoDragDrop(dragSource, this, DragDropEffects.Move);
+                DragDrop.DoDragDrop(dragSource, this, DragDropEffects.Move);
+            }
         }
 
         /// <summary>
