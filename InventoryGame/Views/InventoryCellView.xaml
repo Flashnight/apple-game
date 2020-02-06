@@ -6,13 +6,11 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:local="clr-namespace:InventoryGame.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="120" 
-             d:DesignWidth="150" 
-             Height="140"
-             Width="150"
+             MinHeight="140"
+             MinWidth="150"
              Margin="5" 
              AllowDrop="True"
-             Background="AliceBlue"
+             Background="Cyan"
              cal:Message.Attach="[Event DragOver]=[Action HandleDragOver($source, $eventArgs)];
                                  [Event Drop]=[Action HandleDrop($source, $eventArgs)];
                                  [Event MouseRightButtonUp]=[Action HandleMouseRightButtonUp()];

@@ -43,12 +43,12 @@ namespace InventoryGame.ViewModels
         /// <summary>
         /// View models of the cells.
         /// </summary>
-        private InventoryCellViewModel[][] _inventoryCells;
+        private List<InventoryCellViewModel> _inventoryCells;
 
         /// <summary>
         /// View models of the cells.
         /// </summary>
-        public InventoryCellViewModel[][] InventoryCells
+        public List<InventoryCellViewModel> InventoryCells
         {
             get => _inventoryCells;
             set
@@ -84,22 +84,16 @@ namespace InventoryGame.ViewModels
         /// <param name="message">Event's data.</param>
         public void Handle(NewGameEvent message)
         {
-            _inventoryCells = new InventoryCellViewModel[3][];
-
             _inventory = _inventoryDbRepository.CreateNewInventory();
+            _inventoryCells = new List<InventoryCellViewModel>();
 
-            for (int i = 0; i < 3; i++)
+            foreach (var cell in _inventory.Cells)
             {
-                _inventoryCells[i] = new InventoryCellViewModel[3];
-                for (int j = 0; j < 3; j++)
-                {
-                    InventoryCell cell = _inventory.Cells
-                                                   .First(p => p.Row == i && p.Column == j);
+                ConstructorArgument cellArgument = new ConstructorArgument("inventoryCell", cell);
 
-                    ConstructorArgument cellArgument = new ConstructorArgument("inventoryCell", cell);
+                var cellViewModel = _kernel.Get<InventoryCellViewModel>(cellArgument);
 
-                    _inventoryCells[i][j] = _kernel.Get<InventoryCellViewModel>(cellArgument);
-                }
+                _inventoryCells.Add(cellViewModel);
             }
 
             NotifyOfPropertyChange(() => InventoryCells);

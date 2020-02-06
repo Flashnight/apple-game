@@ -58,6 +58,16 @@ namespace InventoryGame.ViewModels
         public string ImageSource => _inventoryCell?.Item?.ImageSource;
 
         /// <summary>
+        /// Row index in the inventory grid.
+        /// </summary>
+        public int RowIndex => _inventoryCell.Row;
+
+        /// <summary>
+        /// Column index in the inventory grid.
+        /// </summary>
+        public int ColumnIndex => _inventoryCell.Column;
+
+        /// <summary>
         /// ViewModel for an invetory cell.
         /// </summary>
         /// <param name="mediaPlayerWrapper">Media player for sounds.</param>

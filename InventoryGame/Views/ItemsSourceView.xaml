@@ -7,11 +7,11 @@
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Margin="10 20"
+             MinHeight="140"
+             MinWidth="150"
              cal:Message.Attach="[Event MouseDown]=[Action HandleMouseDown($source, $eventArgs)];">
     <Grid>
         <Image x:Name="ItemViewModel"
-               MaxHeight="100"
-               MaxWidth="100"
                Source="{Binding Item.ImageSource, Mode=OneWay}"/>
     </Grid>
 </UserControl>
