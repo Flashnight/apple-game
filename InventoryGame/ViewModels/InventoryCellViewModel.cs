@@ -161,7 +161,7 @@ namespace InventoryGame.ViewModels
 
             if (_inventoryCell.Amount == 0)
             {
-                _inventoryCell.Item.ImageSource = null;
+                _inventoryCell.Item = null;
             }
 
             NotifyOfPropertyChange(() => Amount);

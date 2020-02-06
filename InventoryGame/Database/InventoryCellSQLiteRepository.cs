@@ -46,10 +46,12 @@ namespace InventoryGame.Database
                 connection.ConnectionString = _connectionString.ConnectionString;
                 connection.Open();
 
+                string itemId = cell.Item?.Id.ToString() ?? "NULL";
+
                 using (SQLiteCommand command = new SQLiteCommand(connection))
                 {
                     command.CommandText = $@"UPDATE InventoryCell
-                    SET Amount = {cell.Amount}, ItemId = {cell.Item.Id}
+                    SET Amount = {cell.Amount}, ItemId = {itemId}
                     WHERE Id = {cell.Id};";
 
                     command.CommandType = CommandType.Text;
