@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AppleGame.Views"
         mc:Ignorable="d"
-        Title="Главное меню" Height="230" Width="500">
+        Title="Главное меню" Height="230" Width="500"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <StackPanel>
             <Button x:Name="NewGame"
