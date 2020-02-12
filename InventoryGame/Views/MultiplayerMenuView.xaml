@@ -1,0 +1,40 @@
+﻿<Window x:Class="InventoryGame.Views.MultiplayerMenuView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:InventoryGame.Views"
+      mc:Ignorable="d" 
+      Height="120" Width="300"
+      Title="Выберите режим сетевой игры"
+      Background="{StaticResource background}"
+      ResizeMode="NoResize"
+      WindowStartupLocation="CenterOwner">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <RadioButton x:Name="ServerIsChecked"
+                         GroupName="Mode" 
+                         Content="Сервер"
+                         FontSize="15"
+                         FontFamily="Verdana"
+                         IsChecked="True"/>
+            <RadioButton x:Name="ClientIsChecked"
+                         GroupName="Mode" 
+                         Content="Клиент"
+                         FontSize="15"
+                         FontFamily="Verdana"/>
+        </StackPanel>
+        <Button x:Name="StartMultiplayer"
+                Content="Начать сетевую игру"
+                FontSize="15"
+                FontFamily="Verdana"
+                FontWeight="DemiBold"
+                Grid.Row="1"
+                Background="{StaticResource button1}"/>
+    </Grid>
+</Window>

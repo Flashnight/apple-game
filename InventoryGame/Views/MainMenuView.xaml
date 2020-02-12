@@ -5,24 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryGame.Views"
         mc:Ignorable="d"
-        Title="Главное меню" Height="260" Width="500"
+        Title="Главное меню" Height="380" Width="500"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Background="{StaticResource background}">
-    <Grid>
-        <StackPanel>
-            <Button x:Name="NewGame"
-                    Content="Новая игра"
-                    Style="{DynamicResource MainMenuButton}"
-                    Background="{StaticResource button1}"
-                    IsDefault="True"
-                    Margin="5"/>
-            <Button x:Name="Exit"
-                    Content="Выход"
-                    Style="{DynamicResource MainMenuButton}"
-                    Background="{StaticResource button1}"
-                    IsCancel="True"
-                    Margin="5"/>
-        </StackPanel>
-    </Grid>
+    <StackPanel>
+        <Button x:Name="NewGame"
+                Content="Новая игра"
+                Style="{DynamicResource MainMenuButton}"
+                Background="{StaticResource button1}"
+                Margin="5"/>
+        <Button x:Name="ShowMultiplayerMenu"
+                Content="Сетевая игра"
+                Style="{DynamicResource MainMenuButton}"
+                Background="{StaticResource button1}"
+                Margin="5"/>
+        <Button x:Name="Exit"
+                Content="Выход"
+                Style="{DynamicResource MainMenuButton}"
+                Background="{StaticResource button1}"
+                IsCancel="True"
+                Margin="5"/>
+    </StackPanel>
 </Window>

@@ -18,7 +18,7 @@ namespace InventoryGame.ViewModels
     /// <summary>
     /// View model of the inventory.
     /// </summary>
-    public class InventoryViewModel : Screen, IHandle<NewGameEvent>
+    public class InventoryViewModel : Screen, IHandle<NewGameEvent>, IHandle<StartMultiplayerEvent>
     {
         /// <summary>
         /// Model for inventory.
@@ -97,6 +97,11 @@ namespace InventoryGame.ViewModels
             }
 
             NotifyOfPropertyChange(() => InventoryCells);
+        }
+
+        public void Handle(StartMultiplayerEvent message)
+        {
+            throw new NotImplementedException();
         }
     }
 }

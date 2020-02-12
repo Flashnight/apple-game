@@ -18,12 +18,12 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
-  <PropertyGroup> 
+  <PropertyGroup>
     <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
     <CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
     <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
     <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
- </PropertyGroup>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
@@ -113,6 +113,7 @@
     <Compile Include="Database\IDatabaseMaker.cs" />
     <Compile Include="Database\SQLiteDatabaseMaker.cs" />
     <Compile Include="Database\IInventoryCellDbRepository.cs" />
+    <Compile Include="Events\StartMultiplayerEvent.cs" />
     <Compile Include="Misc\IMediaPlayerWrapper.cs" />
     <Compile Include="Misc\MediaPlayerWrapper.cs" />
     <Compile Include="Models\IModel.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\ItemsSourceViewModel.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />
+    <Compile Include="ViewModels\MultiplayerMenuViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\InventoryCellView.xaml.cs">
       <DependentUpon>InventoryCellView.xaml</DependentUpon>
@@ -137,6 +139,9 @@
     </Compile>
     <Compile Include="Views\MainMenuView.xaml.cs">
       <DependentUpon>MainMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MultiplayerMenuView.xaml.cs">
+      <DependentUpon>MultiplayerMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -195,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainMenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MultiplayerMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

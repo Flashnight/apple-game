@@ -32,7 +32,7 @@ namespace InventoryGame
                                     .InSingletonScope();
 
             // UserControls
-            Bind<MainMenuViewModel>().ToConstructor(opt => new MainMenuViewModel(opt.Inject<IEventAggregator>()))
+            Bind<MainMenuViewModel>().ToConstructor(opt => new MainMenuViewModel(opt.Inject<IEventAggregator>(), opt.Inject<IWindowManager>(), opt.Inject<IKernel>()))
                                      .InSingletonScope();
             Bind<InventoryViewModel>().ToConstructor(opt => new InventoryViewModel(opt.Inject<IKernel>(), opt.Inject<IEventAggregator>(), opt.Inject<IInventoryDbRepository>()))
                                       .InThreadScope();
