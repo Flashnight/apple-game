@@ -2,6 +2,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace InventoryGame.Database
 {
@@ -27,22 +28,22 @@ namespace InventoryGame.Database
         /// Updates inventory cell's data in db.
         /// </summary>
         /// <param name="cell">Inventory cell's data model.</param>
-        public void UpdateCell(InventoryCell cell)
+        public async Task UpdateCellAsync(InventoryCell cell)
         {
-            using (SqliteConnection connection = new SqliteConnection(_connectionString))
+            await using (SqliteConnection connection = new SqliteConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
 
                 string itemId = cell.Item?.Id.ToString() ?? "NULL";
 
-                using (SqliteCommand command = connection.CreateCommand())
+                await using (SqliteCommand command = connection.CreateCommand())
                 {
                     command.CommandText = $@"UPDATE InventoryCell
                     SET Amount = {cell.Amount}, ItemId = {itemId}
                     WHERE Id = {cell.Id};";
 
                     command.CommandType = CommandType.Text;
-                    command.ExecuteNonQuery();
+                    await command.ExecuteNonQueryAsync();
                 }
             }
         }

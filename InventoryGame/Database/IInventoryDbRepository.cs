@@ -1,8 +1,4 @@
 ﻿using InventoryGame.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace InventoryGame.Database
@@ -16,6 +12,6 @@ namespace InventoryGame.Database
         /// Saves inventory in the database.
         /// </summary>
         /// <returns>Inventory's data from db.</returns>
-        Inventory CreateNewInventory();
+        Task<Inventory> CreateNewInventoryAsync();
     }
 }

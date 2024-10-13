@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Data;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace InventoryGame.Database
 {
@@ -21,13 +22,12 @@ namespace InventoryGame.Database
         /// <summary>
         /// Initializes new database if it doesnt exist for SQLLite.
         /// </summary>
-        public void CreateDatabase()
+        public async Task CreateDatabaseAsync()
         {
             string dataSource = string.Empty;
-
             try
             {
-                using (SqliteConnection connection = new SqliteConnection(_connectionString))
+                await using (SqliteConnection connection = new SqliteConnection(_connectionString))
                 {
                     if (File.Exists(connection.DataSource))
                     {
@@ -35,12 +35,12 @@ namespace InventoryGame.Database
                     }
 
                     dataSource = connection.DataSource;
-                    connection.Open();
+                    await connection.OpenAsync();
 
                     
-                    using (SqliteTransaction transaction = connection.BeginTransaction())
+                    await using (SqliteTransaction transaction = connection.BeginTransaction())
                     {
-                        using SqliteCommand command = connection.CreateCommand();
+                        await using SqliteCommand command = connection.CreateCommand();
 
                         command.CommandText = @"CREATE TABLE [Item] (
                         [Id]    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -48,7 +48,7 @@ namespace InventoryGame.Database
                         [ImageSource]   TEXT NOT NULL
                         );";
                         command.CommandType = CommandType.Text;
-                        command.ExecuteNonQuery();
+                        await command.ExecuteNonQueryAsync();
 
                         command.CommandText = @"CREATE TABLE [Inventory] (
 	                    [Id]	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -56,7 +56,7 @@ namespace InventoryGame.Database
 	                    [Widht]	INTEGER NOT NULL
                         );";
                         command.CommandType = CommandType.Text;
-                        command.ExecuteNonQuery();
+                        await command.ExecuteNonQueryAsync();
 
                         command.CommandText = @"CREATE TABLE [InventoryCell] (
 	                    [Id]	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -69,23 +69,23 @@ namespace InventoryGame.Database
                         FOREIGN KEY([ItemId]) REFERENCES[Item]([Id])
                         );";
                         command.CommandType = CommandType.Text;
-                        command.ExecuteNonQuery();
+                        await command.ExecuteNonQueryAsync();
 
                         command.CommandText = @"INSERT INTO Item([Id], [Name], [ImageSource])
                         VALUES (0, 'Apple', '../Resources/Pictures/apple.png')";
                         command.CommandType = CommandType.Text;
-                        command.ExecuteNonQuery();
+                        await command.ExecuteNonQueryAsync();
 
-                        transaction.Commit();
+                        await transaction.CommitAsync();
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (!string.IsNullOrEmpty(dataSource) && File.Exists(dataSource))
                     File.Delete(dataSource);
 
-                throw ex;
+                throw;
             }
         }
     }

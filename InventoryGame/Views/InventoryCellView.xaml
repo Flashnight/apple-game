@@ -12,8 +12,8 @@
              AllowDrop="True"
              Background="{StaticResource item}"
              cal:Message.Attach="[Event DragOver]=[Action HandleDragOver($source, $eventArgs)];
-                                 [Event Drop]=[Action HandleDrop($source, $eventArgs)];
-                                 [Event MouseRightButtonUp]=[Action HandleMouseRightButtonUp()];
+                                 [Event Drop]=[Action HandleDropAsync($source, $eventArgs)];
+                                 [Event MouseRightButtonUp]=[Action HandleMouseRightButtonUpAsync()];
                                  [Event MouseLeftButtonDown]=[Action HandleMouseLeftButtonDown($source, $eventArgs)];">
     <Grid>
         <Grid>

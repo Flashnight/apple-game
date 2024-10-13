@@ -1,8 +1,4 @@
 ﻿using InventoryGame.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace InventoryGame.Database
@@ -17,6 +13,6 @@ namespace InventoryGame.Database
         /// </summary>
         /// <param name="id">Identifier of item.</param>
         /// <returns>Model's data model.</returns>
-        Item GetItemById(int id);
+        Task<Item> GetItemByIdAsync(int id);
     }
 }
