@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Threading;
 
 namespace InventoryGame.ViewModels
 {
@@ -73,7 +74,7 @@ namespace InventoryGame.ViewModels
             _kernel = kernel;
 
             _eventAggregator = eventAggregator;
-            _eventAggregator.Subscribe(this);
+            _eventAggregator.SubscribeOnPublishedThread(this);
 
             _inventoryDbRepository = inventoryDbRepository;
         }
@@ -82,7 +83,7 @@ namespace InventoryGame.ViewModels
         /// Handler for new game event. It cleans the inventory.
         /// </summary>
         /// <param name="message">Event's data.</param>
-        public void Handle(NewGameEvent message)
+        public Task HandleAsync(NewGameEvent message, CancellationToken cancellationToken)
         {
             _inventory = _inventoryDbRepository.CreateNewInventory();
             _inventoryCells = new List<InventoryCellViewModel>();
@@ -97,6 +98,7 @@ namespace InventoryGame.ViewModels
             }
 
             NotifyOfPropertyChange(() => InventoryCells);
+            return Task.CompletedTask;
         }
     }
 }
