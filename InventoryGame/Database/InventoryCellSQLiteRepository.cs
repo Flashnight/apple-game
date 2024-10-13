@@ -1,13 +1,7 @@
 ﻿using InventoryGame.Models;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
+using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
 using System.Data;
-using System.Data.Common;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InventoryGame.Database
 {
@@ -19,20 +13,14 @@ namespace InventoryGame.Database
         /// <summary>
         /// Contains connections string's data.
         /// </summary>
-        private ConnectionStringSettings _connectionString;
-
-        /// <summary>
-        /// Creates SQLite connections.
-        /// </summary>
-        private SQLiteFactory _sqliteFactory;
+        private readonly string _connectionString;
 
         /// <summary>
         /// Hides DB operations for the inventory cells.
         /// </summary>
-        public InventoryCellSQLiteRepository()
+        public InventoryCellSQLiteRepository(IConfiguration configuration)
         {
-            _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"];
-            _sqliteFactory = (SQLiteFactory)DbProviderFactories.GetFactory(_connectionString.ProviderName);
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         /// <summary>
@@ -41,14 +29,13 @@ namespace InventoryGame.Database
         /// <param name="cell">Inventory cell's data model.</param>
         public void UpdateCell(InventoryCell cell)
         {
-            using (SQLiteConnection connection = (SQLiteConnection)_sqliteFactory.CreateConnection())
+            using (SqliteConnection connection = new SqliteConnection(_connectionString))
             {
-                connection.ConnectionString = _connectionString.ConnectionString;
                 connection.Open();
 
                 string itemId = cell.Item?.Id.ToString() ?? "NULL";
 
-                using (SQLiteCommand command = new SQLiteCommand(connection))
+                using (SqliteCommand command = connection.CreateCommand())
                 {
                     command.CommandText = $@"UPDATE InventoryCell
                     SET Amount = {cell.Amount}, ItemId = {itemId}

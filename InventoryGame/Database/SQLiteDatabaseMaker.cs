@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Data.SQLite;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InventoryGame.Database
 {
@@ -17,35 +11,37 @@ namespace InventoryGame.Database
     /// </summary>
     public class SQLiteDatabaseMaker : IDatabaseMaker
     {
+        private readonly string _connectionString;
+
+        public SQLiteDatabaseMaker(IConfiguration configuraion)
+        {
+            _connectionString = configuraion.GetConnectionString("DefaultConnection");
+        }
+
         /// <summary>
         /// Initializes new database if it doesnt exist for SQLLite.
         /// </summary>
         public void CreateDatabase()
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"];
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(connectionString.ConnectionString);
-
-            var baseName = builder.DataSource;
-
-            if (File.Exists(baseName))
-            {
-                return;
-            }
-
-            SQLiteConnection.CreateFile(baseName);
+            string dataSource = string.Empty;
 
             try
             {
-                SQLiteFactory sqliteFactory = (SQLiteFactory)DbProviderFactories.GetFactory(connectionString.ProviderName);
-
-                using (SQLiteConnection connection = (SQLiteConnection)sqliteFactory.CreateConnection())
+                using (SqliteConnection connection = new SqliteConnection(_connectionString))
                 {
-                    connection.ConnectionString = connectionString.ConnectionString;
+                    if (File.Exists(connection.DataSource))
+                    {
+                        return;
+                    }
+
+                    dataSource = connection.DataSource;
                     connection.Open();
 
-                    using (SQLiteCommand command = new SQLiteCommand(connection))
-                    using (SQLiteTransaction transaction = connection.BeginTransaction())
+                    
+                    using (SqliteTransaction transaction = connection.BeginTransaction())
                     {
+                        using SqliteCommand command = connection.CreateCommand();
+
                         command.CommandText = @"CREATE TABLE [Item] (
                         [Id]    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                         [Name]  TEXT NOT NULL,
@@ -86,7 +82,8 @@ namespace InventoryGame.Database
             }
             catch (Exception ex)
             {
-                File.Delete(baseName);
+                if (!string.IsNullOrEmpty(dataSource) && File.Exists(dataSource))
+                    File.Delete(dataSource);
 
                 throw ex;
             }
