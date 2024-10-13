@@ -94,7 +94,7 @@ namespace InventoryGame
             IDatabaseMaker databaseMaker = _kernel.Get<IDatabaseMaker>();
             databaseMaker.CreateDatabase();
 
-            DisplayRootViewFor<ShellViewModel>();
+            DisplayRootViewForAsync<ShellViewModel>();
         }
     }
 }

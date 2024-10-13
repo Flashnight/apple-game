@@ -31,11 +31,11 @@ namespace InventoryGame.ViewModels
         /// <summary>
         /// Runs new game.
         /// </summary>
-        public void NewGame()
+        public async Task NewGameAsync()
         {
-            _eventAggregator.PublishOnUIThread(new NewGameEvent());
+            await _eventAggregator.PublishOnUIThreadAsync(new NewGameEvent());
 
-            this.TryClose(true);
+            await TryCloseAsync(true);
         }
 
         /// <summary>

@@ -4,14 +4,7 @@ using InventoryGame.ViewModels;
 using Caliburn.Micro;
 using Ninject;
 using Ninject.Modules;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.Common;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace InventoryGame
 {
@@ -23,7 +16,15 @@ namespace InventoryGame
         /// </summary>
         public override void Load()
         {
-            int imageId = int.Parse(ConfigurationManager.AppSettings["imageId"]);
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            Bind<IConfiguration>()
+                .ToConstant(config)
+                .InSingletonScope();
+
+            int imageId = int.Parse(config.GetSection("imageId").Value);
 
             // Objects for Caliburn.Micro.
             Bind<IWindowManager>().To<WindowManager>()

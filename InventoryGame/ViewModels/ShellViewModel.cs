@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -86,21 +87,21 @@ namespace InventoryGame.ViewModels
         /// </summary>
         public void ShowMainMenu()
         {
-            Execute.OnUIThread(() =>
+            Execute.OnUIThreadAsync(async () =>
             {
-                _windowManager.ShowDialog(_mainMenuViewModel);
+                await _windowManager.ShowDialogAsync(_mainMenuViewModel);
             });
         }
 
         /// <summary>
         /// Called when activating.
         /// </summary>
-        protected override void OnActivate()
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             // Firstly, show the main menu.
-            Execute.OnUIThread(() =>
+            await Execute.OnUIThreadAsync(async() =>
             {
-                var dialogResult = _windowManager.ShowDialog(_mainMenuViewModel);
+                var dialogResult = await _windowManager.ShowDialogAsync(_mainMenuViewModel);
 
                 if (dialogResult == false)
                 {
@@ -108,7 +109,7 @@ namespace InventoryGame.ViewModels
                 }
             });
 
-            base.OnActivate();
+            await base.OnActivateAsync(cancellationToken);
         }
     }
 }

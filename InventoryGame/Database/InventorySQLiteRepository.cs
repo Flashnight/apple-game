@@ -1,13 +1,9 @@
 ﻿using InventoryGame.Models;
+using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.Common;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InventoryGame.Database
 {
@@ -19,20 +15,14 @@ namespace InventoryGame.Database
         /// <summary>
         /// Contains connections string's data.
         /// </summary>
-        private ConnectionStringSettings _connectionString;
-
-        /// <summary>
-        /// Creates SQLite connections.
-        /// </summary>
-        private SQLiteFactory _sqliteFactory;
+        private readonly string _connectionString;
 
         /// <summary>
         /// Hides DB operations for the inventory.
         /// </summary>
-        public InventorySQLiteRepository()
+        public InventorySQLiteRepository(IConfiguration configuration)
         {
-            _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"];
-            _sqliteFactory = (SQLiteFactory)DbProviderFactories.GetFactory(_connectionString.ProviderName);
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         /// <summary>
@@ -41,17 +31,17 @@ namespace InventoryGame.Database
         /// <returns>Inventory's data from the db.</returns>
         public Inventory CreateNewInventory()
         {
-            using (SQLiteConnection connection = (SQLiteConnection)_sqliteFactory.CreateConnection())
+            using (SqliteConnection connection = new SqliteConnection(_connectionString))
             {
                 int inventoryHeight = 3;
                 int inventoryWidth = 3;
 
-                connection.ConnectionString = _connectionString.ConnectionString;
                 connection.Open();
 
-                using (SQLiteCommand command = new SQLiteCommand(connection))
-                using (SQLiteTransaction transaction = connection.BeginTransaction())
+                using (SqliteTransaction transaction = connection.BeginTransaction())
                 {
+                    using SqliteCommand command = connection.CreateCommand();
+
                     command.CommandText = $@"INSERT INTO Inventory (Height, Widht)
                     VALUES ({inventoryHeight}, {inventoryWidth});";
                     command.CommandType = CommandType.Text;
@@ -83,7 +73,7 @@ namespace InventoryGame.Database
                     command.CommandText = $@"SELECT Id, Row, Column FROM InventoryCell
                     WHERE InventoryId = {id}
                     ORDER BY ID;";
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (SqliteDataReader reader = command.ExecuteReader())
                     {
                         for (int i = 0; i < inventoryHeight; i++)
                             for (int j = 0; j < inventoryWidth; j++)
