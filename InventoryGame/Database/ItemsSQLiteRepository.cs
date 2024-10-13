@@ -1,8 +1,7 @@
 ﻿using InventoryGame.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
-using System.Data;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace InventoryGame.Database
 {
@@ -29,21 +28,21 @@ namespace InventoryGame.Database
         /// </summary>
         /// <param name="id">Identifier of item.</param>
         /// <returns>Model's data model.</returns>
-        public Item GetItemById(int id)
+        public async Task<Item> GetItemByIdAsync(int id)
         {
-            using (SqliteConnection connection = new SqliteConnection(_connectionString))
+            await using (SqliteConnection connection = new SqliteConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
 
-                using (SqliteCommand command = connection.CreateCommand())
+                await using (SqliteCommand command = connection.CreateCommand())
                 {
                     command.CommandText = $@"SELECT * 
                     FROM Item 
                     WHERE Id = {id};";
 
-                    using (SqliteDataReader reader = command.ExecuteReader())
+                    await using (SqliteDataReader reader = command.ExecuteReader())
                     {
-                        reader.Read();
+                        await reader.ReadAsync();
 
                         Item item = new Item
                         {

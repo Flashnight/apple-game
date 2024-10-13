@@ -2,18 +2,10 @@
 using InventoryGame.Misc;
 using InventoryGame.Models;
 using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace InventoryGame.ViewModels
 {
@@ -106,15 +98,14 @@ namespace InventoryGame.ViewModels
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="args">Drag&Drop arguments.</param>
-        public void HandleDrop(Image sender, DragEventArgs args)
+        public async Task HandleDropAsync(Image sender, DragEventArgs args)
         {
             if (null != args.Data && args.Data.GetDataPresent(typeof(ItemsSourceViewModel)))
             {
                 ItemsSourceViewModel data = (ItemsSourceViewModel)args.Data.GetData(typeof(ItemsSourceViewModel));
 
                 _inventoryCell.Amount++;
-                _inventoryCell.Item = _itemsRepository.GetItemById(data.Item.Id);
-                //_inventoryCell.Item.ImageSource = data.Item.ImageSource;
+                _inventoryCell.Item = await _itemsRepository.GetItemByIdAsync(data.Item.Id);
 
                 NotifyOfPropertyChange(() => Amount);
                 NotifyOfPropertyChange(() => ImageSource);
@@ -144,13 +135,13 @@ namespace InventoryGame.ViewModels
                 return;
             }
 
-            _inventoryCellRepository.UpdateCell(_inventoryCell);
+            await _inventoryCellRepository.UpdateCellAsync(_inventoryCell);
         }
 
         /// <summary>
         /// Handler for MouseRightButtonUp. It removes item from the cell.
         /// </summary>
-        public void HandleMouseRightButtonUp()
+        public async Task HandleMouseRightButtonUpAsync()
         {
             if (_inventoryCell.Amount == 0)
             {
@@ -170,7 +161,7 @@ namespace InventoryGame.ViewModels
             MediaPlayerWrapper player = new MediaPlayerWrapper();
             player.PlayEatingAppleCrunch();
 
-            _inventoryCellRepository.UpdateCell(_inventoryCell);
+            await _inventoryCellRepository.UpdateCellAsync(_inventoryCell);
         }
 
         /// <summary>

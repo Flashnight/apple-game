@@ -4,14 +4,8 @@ using InventoryGame.Models;
 using Caliburn.Micro;
 using Ninject;
 using Ninject.Parameters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 using System.Threading;
 
 namespace InventoryGame.ViewModels
@@ -83,9 +77,9 @@ namespace InventoryGame.ViewModels
         /// Handler for new game event. It cleans the inventory.
         /// </summary>
         /// <param name="message">Event's data.</param>
-        public Task HandleAsync(NewGameEvent message, CancellationToken cancellationToken)
+        public async Task HandleAsync(NewGameEvent message, CancellationToken cancellationToken)
         {
-            _inventory = _inventoryDbRepository.CreateNewInventory();
+            _inventory = await _inventoryDbRepository.CreateNewInventoryAsync();
             _inventoryCells = new List<InventoryCellViewModel>();
 
             foreach (var cell in _inventory.Cells)
@@ -98,7 +92,6 @@ namespace InventoryGame.ViewModels
             }
 
             NotifyOfPropertyChange(() => InventoryCells);
-            return Task.CompletedTask;
         }
     }
 }

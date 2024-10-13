@@ -1,14 +1,10 @@
 ﻿using InventoryGame.Database;
-using InventoryGame.Misc;
 using InventoryGame.ViewModels;
 using Caliburn.Micro;
 using Ninject;
 using Ninject.Modules;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace InventoryGame
@@ -92,7 +88,7 @@ namespace InventoryGame
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
             IDatabaseMaker databaseMaker = _kernel.Get<IDatabaseMaker>();
-            databaseMaker.CreateDatabase();
+            databaseMaker.CreateDatabaseAsync();
 
             DisplayRootViewForAsync<ShellViewModel>();
         }

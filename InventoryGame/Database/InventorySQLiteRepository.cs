@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace InventoryGame.Database
 {
@@ -29,23 +30,23 @@ namespace InventoryGame.Database
         /// Saves inventory in the database.
         /// </summary>
         /// <returns>Inventory's data from the db.</returns>
-        public Inventory CreateNewInventory()
+        public async Task<Inventory> CreateNewInventoryAsync()
         {
-            using (SqliteConnection connection = new SqliteConnection(_connectionString))
+            await using (SqliteConnection connection = new SqliteConnection(_connectionString))
             {
                 int inventoryHeight = 3;
                 int inventoryWidth = 3;
 
-                connection.Open();
+                await connection.OpenAsync();
 
-                using (SqliteTransaction transaction = connection.BeginTransaction())
+                await using (SqliteTransaction transaction = connection.BeginTransaction())
                 {
-                    using SqliteCommand command = connection.CreateCommand();
+                    await using SqliteCommand command = connection.CreateCommand();
 
                     command.CommandText = $@"INSERT INTO Inventory (Height, Widht)
                     VALUES ({inventoryHeight}, {inventoryWidth});";
                     command.CommandType = CommandType.Text;
-                    command.ExecuteNonQuery();
+                    await command.ExecuteNonQueryAsync();
 
                     command.CommandText = "SELECT MAX(Id) FROM Inventory;";
                     int id = Convert.ToInt32(command.ExecuteScalar());
@@ -65,7 +66,7 @@ namespace InventoryGame.Database
                             command.CommandText = $@"INSERT INTO InventoryCell (Row, Column, Amount, InventoryId)
                             VALUES ({i}, {j}, 0, {id});";
                             command.CommandType = CommandType.Text;
-                            command.ExecuteNonQuery();
+                            await command.ExecuteNonQueryAsync();
                         }
 
                     
@@ -73,12 +74,12 @@ namespace InventoryGame.Database
                     command.CommandText = $@"SELECT Id, Row, Column FROM InventoryCell
                     WHERE InventoryId = {id}
                     ORDER BY ID;";
-                    using (SqliteDataReader reader = command.ExecuteReader())
+                    await using (SqliteDataReader reader = command.ExecuteReader())
                     {
                         for (int i = 0; i < inventoryHeight; i++)
                             for (int j = 0; j < inventoryWidth; j++)
                             {
-                                reader.Read();
+                                await reader.ReadAsync();
 
                                 InventoryCell inventoryCell = new InventoryCell
                                 {
@@ -95,7 +96,7 @@ namespace InventoryGame.Database
 
                     inventory.Cells = cells;
 
-                    transaction.Commit();
+                    await transaction.CommitAsync();
 
                     return inventory;
                 }

@@ -1,15 +1,9 @@
 ﻿using InventoryGame.Database;
-using InventoryGame.Misc;
 using InventoryGame.Models;
 using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace InventoryGame.ViewModels
 {
@@ -18,6 +12,8 @@ namespace InventoryGame.ViewModels
     /// </summary>
     public class ItemsSourceViewModel : Screen
     {
+        private readonly Task<Item> _loadingDataTask;
+
         /// <summary>
         /// Model of an item.
         /// </summary>
@@ -45,7 +41,13 @@ namespace InventoryGame.ViewModels
         /// <param name="itemId">Identifier of item.</param>
         public ItemsSourceViewModel(IItemsDbRepository itemsRepository, int itemId)
         {
-            Item = itemsRepository.GetItemById(itemId);
+            _loadingDataTask = itemsRepository.GetItemByIdAsync(itemId);
+        }
+
+        protected override async void OnViewAttached(object view, object context)
+        {
+            Item = await _loadingDataTask;
+            base.OnViewAttached(view, context);
         }
 
         /// <summary>
