@@ -1,9 +1,10 @@
-﻿<Window x:Class="InventoryGame.Views.ShellView"
+﻿<mah:MetroWindow x:Class="InventoryGame.Views.ShellView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryGame.Views"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         Title="Инвентарь"
         MinHeight="580"
@@ -21,7 +22,7 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
+        
         <TextBlock Text="Инвентарь"
                    Grid.Column="0"
                    Grid.Row="1"
@@ -62,4 +63,4 @@
                             Grid.Row="1" />
         </Grid>
     </Grid>
-</Window>
+</mah:MetroWindow>
