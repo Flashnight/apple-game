@@ -35,6 +35,11 @@ namespace InventoryGame.ViewModels
         private InventoryCell _inventoryCell;
 
         /// <summary>
+        /// Model of an inventory cell.
+        /// </summary>
+        public InventoryCell InventoryCell => _inventoryCell;
+
+        /// <summary>
         /// Item in the cell.
         /// </summary>
         public Item Item => _inventoryCell.Item;
@@ -100,17 +105,16 @@ namespace InventoryGame.ViewModels
         /// <param name="args">Drag&Drop arguments.</param>
         public async Task HandleDropAsync(Image sender, DragEventArgs args)
         {
-            if (null != args.Data && args.Data.GetDataPresent(typeof(ItemsSourceViewModel)))
+            if (args.Data == null)
+                return;
+            else if (args.Data.GetDataPresent(typeof(ItemsSourceViewModel)))
             {
                 ItemsSourceViewModel data = (ItemsSourceViewModel)args.Data.GetData(typeof(ItemsSourceViewModel));
 
-                _inventoryCell.Amount++;
-                _inventoryCell.Item = await _itemsRepository.GetItemByIdAsync(data.Item.Id);
-
-                NotifyOfPropertyChange(() => Amount);
-                NotifyOfPropertyChange(() => ImageSource);
+                var item = await _itemsRepository.GetItemByIdAsync(data.Item.Id);
+                _inventoryCell.AddItem(item);
             }
-            else if (null != args.Data && args.Data.GetDataPresent(typeof(InventoryCellViewModel)))
+            else if (args.Data.GetDataPresent(typeof(InventoryCellViewModel)))
             {
                 InventoryCellViewModel data = (InventoryCellViewModel)args.Data.GetData(typeof(InventoryCellViewModel));
 
@@ -119,21 +123,16 @@ namespace InventoryGame.ViewModels
                     return;
                 }
 
-                if (_inventoryCell.Amount == 0)
-                {
-                    _inventoryCell.Item = data.Item;
-                    NotifyOfPropertyChange(() => ImageSource);
-                }
-
-                _inventoryCell.Amount += data.Amount;
-                NotifyOfPropertyChange(() => Amount);
-
+                _inventoryCell.CopyFrom(data.InventoryCell);
                 data.ClearCell();
             }
             else
             {
                 return;
             }
+
+            NotifyOfPropertyChange(() => Amount);
+            NotifyOfPropertyChange(() => ImageSource);
 
             await _inventoryCellRepository.UpdateCellAsync(_inventoryCell);
         }
@@ -143,20 +142,12 @@ namespace InventoryGame.ViewModels
         /// </summary>
         public async Task HandleMouseRightButtonUpAsync()
         {
-            if (_inventoryCell.Amount == 0)
+            var isItemRemovedSuccessfully = _inventoryCell.TryRemoveItem();
+            if (isItemRemovedSuccessfully)
             {
-                return;
+                NotifyOfPropertyChange(() => Amount);
+                NotifyOfPropertyChange(() => ImageSource);
             }
-
-            _inventoryCell.Amount--;
-
-            if (_inventoryCell.Amount == 0)
-            {
-                _inventoryCell.Item = null;
-            }
-
-            NotifyOfPropertyChange(() => Amount);
-            NotifyOfPropertyChange(() => ImageSource);
 
             MediaPlayerWrapper player = new MediaPlayerWrapper();
             player.PlayEatingAppleCrunch();
@@ -184,8 +175,7 @@ namespace InventoryGame.ViewModels
         /// </summary>
         public void ClearCell()
         {
-            _inventoryCell.Amount = 0;
-            _inventoryCell.Item = null;
+            _inventoryCell.Clear();
 
             NotifyOfPropertyChange(() => Amount);
             NotifyOfPropertyChange(() => ImageSource);
