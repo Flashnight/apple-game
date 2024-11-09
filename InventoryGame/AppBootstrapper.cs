@@ -87,10 +87,19 @@ namespace InventoryGame
         /// <param name="e">The args.</param>
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            ThrowIfOperationSystemIsUnsupported();
+
             IDatabaseMaker databaseMaker = _kernel.Get<IDatabaseMaker>();
             databaseMaker.CreateDatabaseAsync();
 
             DisplayRootViewForAsync<ShellViewModel>();
+        }
+
+        private void ThrowIfOperationSystemIsUnsupported()
+        {
+            var platform = Environment.OSVersion.Platform;
+            if (platform != PlatformID.Win32NT)
+                throw new PlatformNotSupportedException($"{platform} isn't supported.");
         }
     }
 }

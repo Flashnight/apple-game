@@ -1,34 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace InventoryGame.Models
 {
     /// <summary>
     /// Model of the inventory.
     /// </summary>
-    public class Inventory : IModel
+    public class Inventory(int id, int height, int width, List<InventoryCell> cells) : IModel
     {
         /// <summary>
         /// Identifier.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; set; } = id;
 
         /// <summary>
         /// Height of the inventory.
         /// </summary>
-        public int Height { get; set; }
+        public int Height { get; set; } = height;
 
         /// <summary>
         /// Width of the inventory.
         /// </summary>
-        public int Width { get; set; }
+        public int Width { get; set; } = width;
 
         /// <summary>
         /// Cells in the inventory
         /// </summary>
-        public List<InventoryCell> Cells { get; set; }
+        public List<InventoryCell> Cells { get; set; } = cells;
     }
 }

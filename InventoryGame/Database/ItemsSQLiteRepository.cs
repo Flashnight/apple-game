@@ -30,7 +30,7 @@ namespace InventoryGame.Database
         /// <returns>Model's data model.</returns>
         public async Task<Item> GetItemByIdAsync(int id)
         {
-            await using (SqliteConnection connection = new SqliteConnection(_connectionString))
+            await using (SqliteConnection connection = new(_connectionString))
             {
                 await connection.OpenAsync();
 
@@ -44,12 +44,9 @@ namespace InventoryGame.Database
                     {
                         await reader.ReadAsync();
 
-                        Item item = new Item
-                        {
-                            Id = reader.GetInt32(0),
-                            ItemName = reader.GetString(1),
-                            ImageSource = reader.GetString(2)
-                        };
+                        var itemName = reader.GetString(1);
+                        var itemSource = reader.GetString(2);
+                        Item item = new(id, itemName, itemSource);
 
                         return item;
                     }

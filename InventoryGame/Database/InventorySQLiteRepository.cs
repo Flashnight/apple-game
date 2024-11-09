@@ -51,14 +51,8 @@ namespace InventoryGame.Database
                     command.CommandText = "SELECT MAX(Id) FROM Inventory;";
                     int id = Convert.ToInt32(command.ExecuteScalar());
 
-                    Inventory inventory = new Inventory
-                    {
-                        Id = id,
-                        Height = inventoryHeight,
-                        Width = inventoryWidth
-                    };
-
-                    List<InventoryCell> cells = new List<InventoryCell>();
+                    List<InventoryCell> cells = [];
+                    Inventory inventory = new(id, inventoryHeight, inventoryWidth, cells);
 
                     for (int i = 0; i < inventoryHeight; i++)
                         for (int j = 0; j < inventoryWidth; j++)
@@ -68,8 +62,6 @@ namespace InventoryGame.Database
                             command.CommandType = CommandType.Text;
                             await command.ExecuteNonQueryAsync();
                         }
-
-                    
 
                     command.CommandText = $@"SELECT Id, Row, Column FROM InventoryCell
                     WHERE InventoryId = {id}
@@ -81,14 +73,11 @@ namespace InventoryGame.Database
                             {
                                 await reader.ReadAsync();
 
-                                InventoryCell inventoryCell = new InventoryCell
-                                {
-                                    Id = reader.GetInt32(0),
-                                    Row = reader.GetInt32(1),
-                                    Column = reader.GetInt32(2),
-                                    Amount = 0,
-                                    InventoryId = id
-                                };
+                                int cellId = reader.GetInt32(0);
+                                int row = reader.GetInt32(1);
+                                int column = reader.GetInt32(2);
+                                int amount = 0;
+                                InventoryCell inventoryCell = new(cellId, row, column, amount, id);
 
                                 cells.Add(inventoryCell);
                             }

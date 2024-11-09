@@ -5,28 +5,28 @@ namespace InventoryGame.Models
     /// <summary>
     /// Model of a cell in the inventory.
     /// </summary>
-    public class InventoryCell : IModel
+    public class InventoryCell(int id, int row, int column, int amount, int inventoryId) : IModel, ICloneable
     {
         /// <summary>
         /// Identifier.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; } = id;
 
-        public int Row { get; set; }
+        public int Row { get; } = row;
 
-        public int Column { get; set; }
+        public int Column { get; } = column;
 
         /// <summary>
         /// Model of item.
         /// </summary>
-        public Item Item { get; set; }
+        public Item Item { get; private set; }
 
         /// <summary>
         /// Amount of the item in the cell.
         /// </summary>
-        public int Amount { get; set; }
+        public int Amount { get; private set; } = amount;
 
-        public int InventoryId { get; set; }
+        public int InventoryId { get; } = inventoryId;
 
         /// <summary>
         /// Adds item to cell.
@@ -86,6 +86,26 @@ namespace InventoryGame.Models
         {
             Amount = 0;
             Item = null;
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
+
+        public void RestoreFromClone(InventoryCell inventoryCell)
+        {
+            if (inventoryCell.Id != Id)
+                throw new ArgumentException("Ids are different!", nameof(inventoryCell.Id));
+            else if (inventoryCell.Row != Row)
+                throw new ArgumentException("Row numbers are different!", nameof(inventoryCell.Row));
+            else if (inventoryCell.Column != Column)
+                throw new ArgumentException("Column numbers are different!", nameof(inventoryCell.Column));
+            else if (inventoryCell.InventoryId != InventoryId)
+                throw new ArgumentException("InventoryIds are different!", nameof(inventoryCell.InventoryId));
+
+            Amount = inventoryCell.Amount;
+            Item = inventoryCell.Item;
         }
     }
 }

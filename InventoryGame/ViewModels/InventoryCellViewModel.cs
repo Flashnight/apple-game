@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using InventoryGame.Commands;
+using InventoryGame.Commands.SinglePlayer;
+using System.Security.Cryptography.X509Certificates;
 
 namespace InventoryGame.ViewModels
 {
@@ -14,6 +17,8 @@ namespace InventoryGame.ViewModels
     /// </summary>
     public class InventoryCellViewModel : Screen
     {
+        public IExecuteInvoker _invoker;
+
         /// <summary>
         /// Media player for sounds.
         /// </summary>
@@ -68,11 +73,15 @@ namespace InventoryGame.ViewModels
         /// ViewModel for an invetory cell.
         /// </summary>
         /// <param name="mediaPlayerWrapper">Media player for sounds.</param>
-        public InventoryCellViewModel(IMediaPlayerWrapper mediaPlayerWrapper,
-                                      IInventoryCellDbRepository inventoryCellRepository,
-                                      IItemsDbRepository itemsRepository,
-                                      InventoryCell inventoryCell)
+        public InventoryCellViewModel(
+            IExecuteInvoker invoker,
+            IMediaPlayerWrapper mediaPlayerWrapper,
+            IInventoryCellDbRepository inventoryCellRepository,
+            IItemsDbRepository itemsRepository,
+            InventoryCell inventoryCell)
         {
+            _invoker = invoker;
+
             _mediaPlayerWrapper = mediaPlayerWrapper;
             
             _inventoryCellRepository = inventoryCellRepository;
@@ -107,12 +116,14 @@ namespace InventoryGame.ViewModels
         {
             if (args.Data == null)
                 return;
-            else if (args.Data.GetDataPresent(typeof(ItemsSourceViewModel)))
+
+            ACommand command = null;
+            if (args.Data.GetDataPresent(typeof(ItemsSourceViewModel)))
             {
                 ItemsSourceViewModel data = (ItemsSourceViewModel)args.Data.GetData(typeof(ItemsSourceViewModel));
+                int itemId = data.Item.Id;
 
-                var item = await _itemsRepository.GetItemByIdAsync(data.Item.Id);
-                _inventoryCell.AddItem(item);
+                command = new AddItemFromSourceCommand(this, _inventoryCell, _itemsRepository, _inventoryCellRepository, itemId);
             }
             else if (args.Data.GetDataPresent(typeof(InventoryCellViewModel)))
             {
@@ -123,18 +134,14 @@ namespace InventoryGame.ViewModels
                     return;
                 }
 
-                _inventoryCell.CopyFrom(data.InventoryCell);
-                data.ClearCell();
+                command = new MoveItemsCommand(data, this, data.InventoryCell, _inventoryCell, _inventoryCellRepository);
             }
             else
             {
                 return;
             }
 
-            NotifyOfPropertyChange(() => Amount);
-            NotifyOfPropertyChange(() => ImageSource);
-
-            await _inventoryCellRepository.UpdateCellAsync(_inventoryCell);
+            await _invoker.ExecuteAsync(command);
         }
 
         /// <summary>
@@ -142,17 +149,8 @@ namespace InventoryGame.ViewModels
         /// </summary>
         public async Task HandleMouseRightButtonUpAsync()
         {
-            var isItemRemovedSuccessfully = _inventoryCell.TryRemoveItem();
-            if (isItemRemovedSuccessfully)
-            {
-                NotifyOfPropertyChange(() => Amount);
-                NotifyOfPropertyChange(() => ImageSource);
-            }
-
-            MediaPlayerWrapper player = new MediaPlayerWrapper();
-            player.PlayEatingAppleCrunch();
-
-            await _inventoryCellRepository.UpdateCellAsync(_inventoryCell);
+            RemoveItemCommand command = new(this, _inventoryCell, _inventoryCellRepository);
+            await _invoker.ExecuteAsync(command);
         }
 
         /// <summary>
@@ -162,7 +160,7 @@ namespace InventoryGame.ViewModels
         /// <param name="args">Mouse event arguments.</param>
         public void HandleMouseLeftButtonDown(InventoryCellViewModel sender, MouseEventArgs args)
         {
-            if (this.Item != null)
+            if (Item != null)
             {
                 DependencyObject dragSource = args.Source as DependencyObject;
 
@@ -173,12 +171,10 @@ namespace InventoryGame.ViewModels
         /// <summary>
         /// Remove all items from the cell after Drag&Drop to other cell.
         /// </summary>
-        public void ClearCell()
+        public async Task ClearCellAsync()
         {
-            _inventoryCell.Clear();
-
-            NotifyOfPropertyChange(() => Amount);
-            NotifyOfPropertyChange(() => ImageSource);
+            ClearCellCommand command = new(this);
+            await _invoker.ExecuteAsync(command);
         }
     }
 }

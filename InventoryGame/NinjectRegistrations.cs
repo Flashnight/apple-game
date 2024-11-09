@@ -5,6 +5,7 @@ using Caliburn.Micro;
 using Ninject;
 using Ninject.Modules;
 using Microsoft.Extensions.Configuration;
+using InventoryGame.Commands;
 
 namespace InventoryGame
 {
@@ -43,6 +44,8 @@ namespace InventoryGame
             // Extra objects (from misc. folder).
             Bind<IMediaPlayerWrapper>().To<MediaPlayerWrapper>()
                                        .InSingletonScope();
+            Bind<IExecuteInvoker>().To<Invoker>()
+                .InSingletonScope();
 
             // Database objects
             Bind<IDatabaseMaker>().To<SQLiteDatabaseMaker>()

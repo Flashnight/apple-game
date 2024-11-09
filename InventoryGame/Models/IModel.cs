@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InventoryGame.Models
+﻿namespace InventoryGame.Models
 {
     /// <summary>
     /// Model of data.
@@ -14,6 +8,6 @@ namespace InventoryGame.Models
         /// <summary>
         /// Identifier.
         /// </summary>
-        int Id { get; set; }
+        int Id { get; }
     }
 }
